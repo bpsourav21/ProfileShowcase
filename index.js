@@ -18,19 +18,19 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // db sequelize
-sequelize
-  .sync()
-  .then(() => {
-    console.log("Synced db.");
-  })
-  .catch((err) => {
-    console.log("Failed to sync db: " + err.message);
-  });
+// sequelize
+//   .sync()
+//   .then(() => {
+//     console.log("Synced db.");
+//   })
+//   .catch((err) => {
+//     console.log("Failed to sync db: " + err.message);
+//   });
 
 // drop the table if it already exists
-// sequelize.sync({ force: true }).then(() => {
-//   console.log("Drop and re-sync db.");
-// });
+sequelize.sync({ force: true }).then(() => {
+  console.log("Drop and re-sync db.");
+});
 
 // simple route
 app.get("/", (req, res) => {
