@@ -1,12 +1,8 @@
 const Sequelize = require("sequelize");
+const dbUrl = process.env.DATABASE_URL || "localhost";
 
-const dbConfig = {
-  DATABASE_URL:
-    "postgres://gdfnjpgi:VSakogcaBa2bZBmFq4_zG0yhWyknIX0T@abul.db.elephantsql.com/gdfnjpgi",
+const sequelize = new Sequelize(dbUrl, {
   dialect: "postgres",
-};
-const sequelize = new Sequelize(dbConfig.DATABASE_URL, {
-  dialect: dbConfig.dialect,
   dialectOptions: {
     ssl: {
       require: true,
@@ -15,11 +11,4 @@ const sequelize = new Sequelize(dbConfig.DATABASE_URL, {
   },
 });
 
-const db = {};
-
-db.Sequelize = Sequelize;
-db.sequelize = sequelize;
-
-db.profiles = require("../models/Profile")(sequelize, Sequelize);
-
-module.exports = db;
+module.exports = sequelize;

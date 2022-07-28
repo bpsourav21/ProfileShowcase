@@ -1,32 +1,32 @@
-const db = require("../db/index");
-const Profile = db.profiles;
-const Op = db.Sequelize.Op;
+const sequelize = require("../db/index");
+const Profile = require("../models/Profile");
+const Op = sequelize.Op;
 
 // Create and Save a new Tutorial
 exports.create = (req, res) => {
   // Validate request
   if (!req.body.name) {
     res.status(400).send({
-      message: "Content can not be empty!"
+      message: "Content can not be empty!",
     });
     return;
   }
 
   // Create a Profile
   const profile = {
-    Name: req.body.name,
-    Age: req.body.age
+    name: req.body.name,
+    age: req.body.age,
   };
 
   // Save Profile in the database
   Profile.create(profile)
-    .then(data => {
+    .then((data) => {
       res.send(data);
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the Profile."
+          err.message || "Some error occurred while creating the Profile.",
       });
     });
 };
@@ -34,16 +34,16 @@ exports.create = (req, res) => {
 // Retrieve all Profiles from the database.
 exports.findAll = (req, res) => {
   const name = req.query.name;
-  var condition = name ? { Name: { [Op.iLike]: `%${name}%` } } : null;
+  var condition = name ? { name: { [Op.iLike]: `%${name}%` } } : null;
 
   Profile.findAll({ where: condition })
-    .then(data => {
+    .then((data) => {
       res.send(data);
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving Profiles."
+          err.message || "Some error occurred while retrieving Profiles.",
       });
     });
 };

@@ -1,8 +1,9 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const app = express();
 const routes = require("./app/routes/index");
-const db = require("./app/db/index");
+const sequelize = require("./app/db/index");
 
 var corsOptions = {
   origin: "http://localhost:8081",
@@ -16,7 +17,8 @@ app.use(express.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 
-db.sequelize
+// db sequelize
+sequelize
   .sync()
   .then(() => {
     console.log("Synced db.");
@@ -25,8 +27,8 @@ db.sequelize
     console.log("Failed to sync db: " + err.message);
   });
 
-// // drop the table if it already exists
-// db.sequelize.sync({ force: true }).then(() => {
+// drop the table if it already exists
+// sequelize.sync({ force: true }).then(() => {
 //   console.log("Drop and re-sync db.");
 // });
 

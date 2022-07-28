@@ -1,12 +1,21 @@
-module.exports = (sequelize, Sequelize) => {
-  const Profile = sequelize.define("profile", {
-    Name: {
-      type: Sequelize.STRING
-    },
-    Age: {
-      type: Sequelize.INTEGER
-    }
-  });
+const { DataTypes } = require("sequelize");
+const sequelize = require("../db/index");
 
-  return Profile;
-};
+const Profile = sequelize.define(
+  "profile",
+  {
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    age: {
+      type: DataTypes.INTEGER,
+      // allowNull defaults to true
+    },
+  },
+  {
+    // Other model options go here
+  }
+);
+
+module.exports = Profile;
