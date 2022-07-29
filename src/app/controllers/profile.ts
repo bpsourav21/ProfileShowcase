@@ -1,10 +1,9 @@
-const sequelize = require("../db/index");
-const Profile = require("../models/Profile");
-const WorkExperience = require("../models/WorkExperience");
-const Op = sequelize.Op;
+import { Request, Response } from "express";
+import { Profile } from "../models/Profile";
+import { WorkExperience } from "../models/WorkExperience";
 
 // Create and Save a new profile
-exports.create = (req, res) => {
+export const create = (req: Request, res: Response) => {
   // Validate request
   if (!req.body.name) {
     res.status(400).send({
@@ -22,7 +21,9 @@ exports.create = (req, res) => {
   // Save Profile in the database
   Profile.create(profile)
     .then((data) => {
+      //@ts-ignore
       const experiences = req.body.experience.map((exp) => {
+        //@ts-ignore
         exp.expId = data.id;
         return exp;
       });
@@ -47,7 +48,7 @@ exports.create = (req, res) => {
 };
 
 // Retrieve all Profiles from the database.
-exports.findAll = (req, res) => {
+export const findAll = (req: Request, res: Response) => {
   const name = req.query.name;
   // var condition = name ? { name: { [Op.iLike]: `%${name}%` } } : null;
 

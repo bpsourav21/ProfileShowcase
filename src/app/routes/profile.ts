@@ -1,6 +1,7 @@
-const profiles = require("../controllers/profile.js");
+import { Router } from "express";
+import * as profiles from "../controllers/profile.js";
 
-var router = require("express").Router();
+const router = Router();
 
 // Create a new profile
 router.post("/", profiles.create);
@@ -23,4 +24,4 @@ router.get("/", profiles.findAll);
 // // Delete all profiles
 // router.delete("/", profiles.deleteAll);
 
-module.exports = router;
+export default router;

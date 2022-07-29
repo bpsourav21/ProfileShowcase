@@ -1,8 +1,8 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../db/index");
-const WorkExperience = require("./WorkExperience");
+import { DataTypes, Model } from "sequelize";
+import sequelize from "../db/index";
+import { WorkExperience } from "./WorkExperience";
 
-const Profile = sequelize.define(
+export const Profile = sequelize.define(
   "profile",
   {
     id: {
@@ -17,6 +17,7 @@ const Profile = sequelize.define(
     },
     age: {
       type: DataTypes.INTEGER,
+      allowNull: false,
     },
     profilePicture: {
       type: DataTypes.BLOB,
@@ -28,5 +29,3 @@ const Profile = sequelize.define(
 );
 
 Profile.hasMany(WorkExperience, { foreignKey: "expId" });
-
-module.exports = Profile;

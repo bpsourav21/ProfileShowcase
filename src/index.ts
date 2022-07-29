@@ -1,9 +1,12 @@
-require("dotenv").config();
-const express = require("express");
-const cors = require("cors");
+import dotenv from "dotenv";
+dotenv.config();
+
+import express, { Request, Response } from "express";
+import routes from "./app/routes";
+import sequelize from "./app/db/index";
+import cors from "cors";
+
 const app = express();
-const routes = require("./app/routes/index");
-const sequelize = require("./app/db/index");
 
 var corsOptions = {
   origin: "http://localhost:8081",
@@ -33,7 +36,7 @@ sequelize.sync({ force: true }).then(() => {
 });
 
 // simple route
-app.get("/", (req, res) => {
+app.get("/", (req: Request, res: Response) => {
   res.json({ message: "Hello world" });
 });
 

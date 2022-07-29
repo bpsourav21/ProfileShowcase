@@ -1,7 +1,7 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../db/index");
+import { DataTypes } from "sequelize";
+import sequelize from "../db/index";
 
-const WorkExperience = sequelize.define(
+export const WorkExperience = sequelize.define(
   "work_experience",
   {
     id: {
@@ -38,5 +38,3 @@ const WorkExperience = sequelize.define(
     // Other model options go here
   }
 );
-
-module.exports = WorkExperience;
