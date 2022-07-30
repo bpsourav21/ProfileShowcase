@@ -1,8 +1,27 @@
-import { DataTypes, Model } from "sequelize";
+import {
+  Model,
+  DataTypes,
+  InferAttributes,
+  InferCreationAttributes,
+  CreationOptional,
+} from "sequelize";
 import sequelize from "../db/index";
-import { WorkExperience } from "./WorkExperience";
+import { WorkExperienceModel } from "./WorkExperience";
 
-export const Profile = sequelize.define(
+export type ProfileAttribute = InferAttributes<ProfileModel>;
+export type ProfileDto = InferCreationAttributes<ProfileModel, { omit: "id" }>;
+
+interface ProfileModel extends Model<ProfileAttribute, ProfileDto> {
+  id: CreationOptional<number>;
+  name: string;
+  age: number;
+  profilePicture: string | null;
+  // Timestamps
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export const ProfileModel = sequelize.define<ProfileModel>(
   "profile",
   {
     id: {
@@ -28,4 +47,4 @@ export const Profile = sequelize.define(
   }
 );
 
-Profile.hasMany(WorkExperience, { foreignKey: "expId" });
+ProfileModel.hasMany(WorkExperienceModel, { foreignKey: "expId" });

@@ -3,11 +3,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Profile = void 0;
+exports.ProfileModel = void 0;
 const sequelize_1 = require("sequelize");
 const index_1 = __importDefault(require("../db/index"));
 const WorkExperience_1 = require("./WorkExperience");
-exports.Profile = index_1.default.define("profile", {
+exports.ProfileModel = index_1.default.define("profile", {
     id: {
         type: sequelize_1.DataTypes.INTEGER,
         autoIncrement: true,
@@ -28,4 +28,4 @@ exports.Profile = index_1.default.define("profile", {
 }, {
 // Other model options go here
 });
-exports.Profile.hasMany(WorkExperience_1.WorkExperience, { foreignKey: "expId" });
+exports.ProfileModel.hasMany(WorkExperience_1.WorkExperienceModel, { foreignKey: "expId" });

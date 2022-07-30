@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
-import { Profile } from "../models/Profile";
-import { WorkExperience } from "../models/WorkExperience";
+import { ProfileModel, ProfileDto } from "../models/Profile";
+import {
+  WorkExperienceDto,
+  WorkExperienceModel,
+} from "../models/WorkExperience";
 
 // Create and Save a new profile
 export const create = (req: Request, res: Response) => {
@@ -13,21 +16,22 @@ export const create = (req: Request, res: Response) => {
   }
 
   // Create a Profile
-  const profile = {
+  const profile: ProfileDto = {
     name: req.body.name,
     age: req.body.age,
+    profilePicture: null,
   };
 
   // Save Profile in the database
-  Profile.create(profile)
+  ProfileModel.create(profile)
     .then((data) => {
-      //@ts-ignore
-      const experiences = req.body.experience.map((exp) => {
-        //@ts-ignore
-        exp.expId = data.id;
-        return exp;
-      });
-      WorkExperience.bulkCreate(experiences)
+      const experiences: WorkExperienceDto[] = req.body.experience.map(
+        (exp: WorkExperienceDto) => {
+          exp.expId = data.id;
+          return exp;
+        }
+      );
+      WorkExperienceModel.bulkCreate(experiences)
         .then((data2) => {
           res.send("success");
         })
@@ -52,7 +56,7 @@ export const findAll = (req: Request, res: Response) => {
   const name = req.query.name;
   // var condition = name ? { name: { [Op.iLike]: `%${name}%` } } : null;
 
-  Profile.findAll({ include: WorkExperience })
+  ProfileModel.findAll({ include: WorkExperienceModel })
     .then((data) => {
       res.send(data);
     })

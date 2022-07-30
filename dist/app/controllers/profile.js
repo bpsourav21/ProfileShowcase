@@ -16,17 +16,16 @@ const create = (req, res) => {
     const profile = {
         name: req.body.name,
         age: req.body.age,
+        profilePicture: null,
     };
     // Save Profile in the database
-    Profile_1.Profile.create(profile)
+    Profile_1.ProfileModel.create(profile)
         .then((data) => {
-        //@ts-ignore
         const experiences = req.body.experience.map((exp) => {
-            //@ts-ignore
             exp.expId = data.id;
             return exp;
         });
-        WorkExperience_1.WorkExperience.bulkCreate(experiences)
+        WorkExperience_1.WorkExperienceModel.bulkCreate(experiences)
             .then((data2) => {
             res.send("success");
         })
@@ -48,7 +47,7 @@ exports.create = create;
 const findAll = (req, res) => {
     const name = req.query.name;
     // var condition = name ? { name: { [Op.iLike]: `%${name}%` } } : null;
-    Profile_1.Profile.findAll({ include: WorkExperience_1.WorkExperience })
+    Profile_1.ProfileModel.findAll({ include: WorkExperience_1.WorkExperienceModel })
         .then((data) => {
         res.send(data);
     })
