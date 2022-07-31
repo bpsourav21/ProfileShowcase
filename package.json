@@ -4,9 +4,10 @@
   "description": "Node js, sequlize with postgres with react ",
   "main": "index.js",
   "scripts": {
-    "build": "npx tsc",
+    "clean": "rm -rf dist",
+    "build": "npm run clean && npx tsc",
     "start": "node dist/index.js",
-    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
+    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/server/index.js\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
