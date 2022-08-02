@@ -1,0 +1,114 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  box-sizing: border-box;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.page-not-found {
+  margin-top: 10%;
+  h3 {
+    font-size: 30px;
+    text-align: center;
+  }
+}
+
+.loading-overlay {
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 9999;
+  .loader {
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+  }
+}
+.login {
+  input,
+  input:active,
+  input:focus {
+    background-color: #eceff1 !important;
+  }
+}
+
+.mainWrapper {
+  .page {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ff7043;
+    position: absolute;
+  }
+
+  .centerBlock {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    border: 0.5px solid #5b5f62;
+    background-size: 80%;
+    box-shadow: inset 1px 1px 4px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  .outer {
+    position: absolute;
+    pointer-events: none;
+    &.orbit {
+      border: 0.5px solid #5b5f62;
+      border-radius: 100%;
+    }
+    & .circle {
+      position: absolute;
+      width: 48px;
+      height: 48px;
+      left: -24px;
+      top: calc(50% - 24px);
+      border-radius: 100px;
+      background: #fff center center;
+      background-size: 85%;
+      box-shadow: inset 1px 1px 2px 0 rgba(0, 0, 0, 0.2);
+    }
+    & .circle:nth-child(2) {
+      left: calc(100% - 24px);
+    }
+  }
+
+  .bottom-block {
+    padding: 20px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: fixed;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+
+  @keyframes rotate {
+    100% {
+      -webkit-transform: rotate(360deg);
+      -moz-transform: rotate(360deg);
+      -ms-transform: rotate(360deg);
+      -o-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  }
+}
