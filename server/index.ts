@@ -5,6 +5,7 @@ dotenv.config();
 import express, { Request, Response } from "express";
 import routes from "./app/routes";
 import cors from "cors";
+import path from 'path';
 import { initDbConnection } from "./app/db/init";
 
 const initAppConfig = () => {
@@ -23,12 +24,20 @@ const initAppConfig = () => {
   app.use(express.urlencoded({ extended: true }));
 
   // simple route
-  app.get("/", (req: Request, res: Response) => {
-    res.json({ message: "Hello world" });
-  });
+  // app.get("/", (req: Request, res: Response) => {
+  //   res.json({ message: "Hello world" });
+  // });
 
   // application routes
   app.use("/api", routes);
+
+  // Serve any static files
+  app.use(express.static(path.join(__dirname, '../client/build')));
+
+  // Handle React routing, return all requests to React app
+  app.get('*', function (req, res) {
+    res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+  });
 
   // set port, listen for requests
   const PORT = process.env.PORT || 3000;
