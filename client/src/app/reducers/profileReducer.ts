@@ -1,4 +1,4 @@
-import { Profile } from "../actions/actionTypes";
+import { ProfileActionType } from "../actions/actionTypes";
 import { ProfileDto } from "../dtos/profile";
 
 export interface ProfileState {
@@ -18,19 +18,19 @@ export const profileReducer = (
   action: any
 ): ProfileState => {
   switch (action.type) {
-    case Profile.GET_PROFILES_DATA_REQUEST:
+    case ProfileActionType.GET_ALL_PROFILES.PROCESSING:
       return {
         ...state,
         profiles: [],
         isLoading: true,
       };
-    case Profile.GET_PROFILES_DATA_SUCCESS:
+    case ProfileActionType.GET_ALL_PROFILES.SUCCESS:
       return {
         ...state,
         profiles: action.payload,
         isLoading: false,
       };
-    case Profile.GET_PROFILES_DATA_FAILED:
+    case ProfileActionType.GET_ALL_PROFILES.FAILED:
       return {
         ...state,
         profiles: [],

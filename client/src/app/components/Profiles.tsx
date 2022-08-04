@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { getProfiles } from "../actions/profileActions";
 import { ProfileDto } from "../dtos/profile";
 import { useAppSelector, useAppDispatch } from "../hooks";
@@ -6,6 +7,8 @@ import { useAppSelector, useAppDispatch } from "../hooks";
 const Profiles = () => {
   const profiles = useAppSelector((state) => state.profile.profiles);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
   useEffect(() => {
     dispatch(getProfiles());
   }, []);
@@ -17,6 +20,10 @@ const Profiles = () => {
         <td>{profile.name}</td>
         <td>{profile.age}</td>
         <td>{profile.profilePicture}</td>
+        <td className="text-center">
+          <Link to={"/edit-profile/" + profile.id}>
+            <i className="fas fa-edit"></i>
+          </Link></td>
       </tr>
     );
   });
@@ -29,6 +36,7 @@ const Profiles = () => {
           <th>Name</th>
           <th>Age</th>
           <th>Profile Picture</th>
+          <th className="text-center">Action</th>
         </tr>
       </thead>
       <tbody>{rowData}</tbody>
@@ -38,6 +46,9 @@ const Profiles = () => {
   return (
     <div className="page">
       <h1>Profile Information</h1>
+      <div className="mb-3">
+        <button className="btn btn-primary" onClick={() => navigate("/add-profile")}>Add Profile</button>
+      </div>
       {table}
     </div>
   );

@@ -14,7 +14,8 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route path="/" element={<Profiles />} />
-              <Route path="/add-product" element={<AddOrEditProfile />} />
+              <Route path="/add-profile" element={<AddOrEditProfile />} />
+              <Route path="/edit-profile/:id" element={<AddOrEditProfile />} />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
