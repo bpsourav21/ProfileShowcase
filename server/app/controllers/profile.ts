@@ -67,3 +67,85 @@ export const findAll = (req: Request, res: Response) => {
       });
     });
 };
+
+// Retrieve one Profile from the database.
+export const findOne = (req, res) => {
+  const id = req.params.id;
+
+  ProfileModel.findByPk(id)
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error retrieving Profile with id=" + id
+      });
+    });
+};
+
+// Update a Profile by the id in the request
+export const update = (req, res) => {
+  const id = req.params.id;
+
+  ProfileModel.update(req.body, {
+    where: { id: id }
+  })
+    .then(num => {
+      if (num[0] == 1) {
+        res.send({
+          message: "Profile was updated successfully."
+        });
+      } else {
+        res.send({
+          message: `Cannot update Profile with id=${id}. Maybe ProfileModel was not found or req.body is empty!`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error updating Profile with id=" + id
+      });
+    });
+};
+
+// Delete a Profile with the specified id in the request
+export const deleteOne = (req, res) => {
+  const id = req.params.id;
+
+  ProfileModel.destroy({
+    where: { id: id }
+  })
+    .then(num => {
+      if (num == 1) {
+        res.send({
+          message: "Profile was deleted successfully!"
+        });
+      } else {
+        res.send({
+          message: `Cannot delete Profile with id=${id}. Maybe ProfileModel was not found!`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Could not delete Profile with id=" + id
+      });
+    });
+};
+
+// Delete all Profiles from the database.
+export const deleteAll = (req, res) => {
+  ProfileModel.destroy({
+    where: {},
+    truncate: false
+  })
+    .then(nums => {
+      res.send({ message: `${nums} Profiles were deleted successfully!` });
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while removing all Profiles."
+      });
+    });
+};
