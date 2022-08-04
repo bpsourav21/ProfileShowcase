@@ -27,7 +27,7 @@ interface WorkExperienceModel
 }
 
 export const WorkExperienceModel = sequelize.define<WorkExperienceModel>(
-  "work_experience",
+  "workExperience",
   {
     id: {
       type: DataTypes.UUID,

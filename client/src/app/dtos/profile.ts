@@ -5,11 +5,11 @@ export interface ProfileDto {
   profilePicture: string | null;
   createdAt?: Date;
   updatedAt?: Date;
-  workExperience: WorkExperience[];
+  workExperiences: WorkExperience[];
 }
 
 export interface WorkExperience {
-  id: string
+  id?: string
   jobTitle: string;
   company: string | null;
   companyLogo: string | null;
@@ -17,7 +17,7 @@ export interface WorkExperience {
   startDate: Date | null;
   endDate: Date | null;
   isContinuing: boolean;
-  expId: number;
+  expId?: number;
   createdAt?: Date;
   updatedAt?: Date;
 }

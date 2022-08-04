@@ -69,10 +69,10 @@ export const findAll = (req: Request, res: Response) => {
 };
 
 // Retrieve one Profile from the database.
-export const findOne = (req, res) => {
+export const findOne = (req: Request, res: Response) => {
   const id = req.params.id;
 
-  ProfileModel.findByPk(id)
+  ProfileModel.findByPk(id, { include: WorkExperienceModel })
     .then(data => {
       res.send(data);
     })
@@ -84,7 +84,7 @@ export const findOne = (req, res) => {
 };
 
 // Update a Profile by the id in the request
-export const update = (req, res) => {
+export const update = (req: Request, res: Response) => {
   const id = req.params.id;
 
   ProfileModel.update(req.body, {
@@ -109,7 +109,7 @@ export const update = (req, res) => {
 };
 
 // Delete a Profile with the specified id in the request
-export const deleteOne = (req, res) => {
+export const deleteOne = (req: Request, res: Response) => {
   const id = req.params.id;
 
   ProfileModel.destroy({
@@ -134,7 +134,7 @@ export const deleteOne = (req, res) => {
 };
 
 // Delete all Profiles from the database.
-export const deleteAll = (req, res) => {
+export const deleteAll = (req: Request, res: Response) => {
   ProfileModel.destroy({
     where: {},
     truncate: false

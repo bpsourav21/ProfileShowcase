@@ -15,6 +15,9 @@ code {
   font-size: 30px;
   text-align: center;
 }
+.modalBackdrop {
+  background-color: rgba(0, 0, 0, 0.7);
+}
 .loading-overlay {
   top: 0;
   bottom: 0;

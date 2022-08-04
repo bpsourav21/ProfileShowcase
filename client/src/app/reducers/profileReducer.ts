@@ -4,13 +4,15 @@ import { ProfileDto } from "../dtos/profile";
 export interface ProfileState {
   isLoading: boolean;
   errorMsg: string;
-  profiles: ProfileDto[];
+  allProfiles: ProfileDto[];
+  profile: ProfileDto | null;
 }
 
 const initialState: ProfileState = {
   isLoading: false,
   errorMsg: "",
-  profiles: [],
+  allProfiles: [],
+  profile: null
 };
 
 export const profileReducer = (
@@ -21,19 +23,38 @@ export const profileReducer = (
     case ProfileActionType.GET_ALL_PROFILES.PROCESSING:
       return {
         ...state,
-        profiles: [],
+        allProfiles: [],
         isLoading: true,
       };
     case ProfileActionType.GET_ALL_PROFILES.SUCCESS:
       return {
         ...state,
-        profiles: action.payload,
+        allProfiles: action.payload,
         isLoading: false,
       };
     case ProfileActionType.GET_ALL_PROFILES.FAILED:
       return {
         ...state,
-        profiles: [],
+        allProfiles: [],
+        isLoading: false,
+      };
+
+    case ProfileActionType.GET_PROFILE.PROCESSING:
+      return {
+        ...state,
+        profile: null,
+        isLoading: true,
+      };
+    case ProfileActionType.GET_PROFILE.SUCCESS:
+      return {
+        ...state,
+        profile: action.payload,
+        isLoading: false,
+      };
+    case ProfileActionType.GET_PROFILE.FAILED:
+      return {
+        ...state,
+        profile: null,
         isLoading: false,
       };
 

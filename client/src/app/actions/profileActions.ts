@@ -29,9 +29,9 @@ export const getOneProfile = (id: number) => {
   return (dispatch: AppDispatch) => {
     dispatch({ type: ProfileActionType.GET_PROFILE.PROCESSING });
     apiService
-      .get(`/profiles`)
+      .get(`/profiles/` + id)
       .then((res) => {
-        const data: ProfileDto[] = res.data;
+        const data: ProfileDto = res.data;
         dispatch({
           type: ProfileActionType.GET_PROFILE.SUCCESS,
           payload: data
@@ -46,17 +46,39 @@ export const getOneProfile = (id: number) => {
   };
 };
 
-export const updateProfile = () => {
+export const updateProfile = (id: number) => {
   return (dispatch: AppDispatch) => {
     dispatch({ type: ProfileActionType.UPDATE_PROFILE.PROCESSING });
     apiService
-      .get(`/profiles`)
+      .put(`/profiles/` + id)
       .then((res) => {
-        const data: ProfileDto[] = res.data;
+        const data = res.data;
         dispatch({
           type: ProfileActionType.UPDATE_PROFILE.SUCCESS,
           payload: data
         });
+      })
+      .catch((e) => {
+        dispatch({
+          type: ProfileActionType.UPDATE_PROFILE.FAILED,
+          payload: e,
+        });
+      });
+  };
+};
+
+export const deleteProfile = (id: number) => {
+  return (dispatch: AppDispatch) => {
+    dispatch({ type: ProfileActionType.UPDATE_PROFILE.PROCESSING });
+    apiService
+      .delete(`/profiles/` + id)
+      .then((res) => {
+        const data = res.data;
+        dispatch({
+          type: ProfileActionType.UPDATE_PROFILE.SUCCESS,
+          payload: data
+        });
+        dispatch(getProfiles());
       })
       .catch((e) => {
         dispatch({
