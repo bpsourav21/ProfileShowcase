@@ -1,9 +1,9 @@
-import { LoginDto } from "../models/auth";
 import { AppDispatch } from "../store";
 import { Auth } from "./actionTypes";
 import _ from "underscore";
 import apiService from "../service/apiService";
 import { getAuthToken, setAuthToken } from "../helpers/storage";
+import { LoginDto } from "../dtos/auth";
 
 export const login = (
   email: string,

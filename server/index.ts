@@ -12,7 +12,7 @@ const initAppConfig = () => {
   const app = express();
 
   var corsOptions = {
-    origin: "http://localhost:8081",
+    origin: "http://localhost:3000",
   };
 
   app.use(cors(corsOptions));
@@ -48,7 +48,6 @@ const initAppConfig = () => {
 
 // Initialize Db connection
 initDbConnection.then((res) => {
-  console.log(res);
   initAppConfig();
 })
   .catch((e) => {
