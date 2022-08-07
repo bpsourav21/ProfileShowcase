@@ -1,5 +1,5 @@
 
-import { ProfileDto } from "../dtos/profile";
+import { ProfileDto, WorkExperience } from "../dtos/profile";
 import apiService from "../service/apiService";
 import { AppDispatch } from "../store";
 import { ProfileActionType } from "./actionTypes";
@@ -25,6 +25,15 @@ export const getProfiles = () => {
   };
 };
 
+export const addProfileExperience = (workExperience: WorkExperience) => {
+  return (dispatch: AppDispatch) => {
+    dispatch({
+      type: ProfileActionType.ADD_PROFILE_EXPERIENCE,
+      payload: workExperience
+    });
+  };
+}
+
 export const getOneProfile = (id: number) => {
   return (dispatch: AppDispatch) => {
     dispatch({ type: ProfileActionType.GET_PROFILE.PROCESSING });
@@ -40,6 +49,35 @@ export const getOneProfile = (id: number) => {
       .catch((e) => {
         dispatch({
           type: ProfileActionType.GET_PROFILE.FAILED,
+          payload: e,
+        });
+      });
+  };
+};
+
+export const addProfile = () => {
+  return (dispatch: AppDispatch) => {
+    dispatch({ type: ProfileActionType.ADD_NEW_PROFILE.PROCESSING });
+    const profile = {
+      "name": "mahadi hasan",
+      "age": 30,
+      "experience": [{
+        "jobTitle": "engineer"
+      }]
+    };
+
+    apiService
+      .post(`/profiles/`, profile)
+      .then((res) => {
+        const data = res.data;
+        dispatch({
+          type: ProfileActionType.ADD_NEW_PROFILE.SUCCESS,
+          payload: data
+        });
+      })
+      .catch((e) => {
+        dispatch({
+          type: ProfileActionType.ADD_NEW_PROFILE.FAILED,
           payload: e,
         });
       });

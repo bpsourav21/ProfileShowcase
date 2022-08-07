@@ -1,18 +1,22 @@
 import { ProfileActionType } from "../actions/actionTypes";
-import { ProfileDto } from "../dtos/profile";
+import { ProfileDto, WorkExperience } from "../dtos/profile";
 
 export interface ProfileState {
   isLoading: boolean;
   errorMsg: string;
   allProfiles: ProfileDto[];
-  profile: ProfileDto | null;
+  profile: ProfileDto;
+  workExperiences: WorkExperience[];
 }
+
+const emptyProfile = {} as ProfileDto;
 
 const initialState: ProfileState = {
   isLoading: false,
   errorMsg: "",
   allProfiles: [],
-  profile: null
+  profile: emptyProfile,
+  workExperiences: []
 };
 
 export const profileReducer = (
@@ -42,22 +46,32 @@ export const profileReducer = (
     case ProfileActionType.GET_PROFILE.PROCESSING:
       return {
         ...state,
-        profile: null,
+        profile: emptyProfile,
+        workExperiences: [],
         isLoading: true,
       };
-    case ProfileActionType.GET_PROFILE.SUCCESS:
+    case ProfileActionType.GET_PROFILE.SUCCESS: {
+      const currentProfile = action.payload as ProfileDto;
       return {
         ...state,
-        profile: action.payload,
+        profile: currentProfile,
+        workExperiences: currentProfile.workExperiences,
         isLoading: false,
       };
+    }
     case ProfileActionType.GET_PROFILE.FAILED:
       return {
         ...state,
-        profile: null,
+        profile: emptyProfile,
+        workExperiences: [],
         isLoading: false,
       };
 
+    case ProfileActionType.ADD_PROFILE_EXPERIENCE:
+      return {
+        ...state,
+        workExperiences: state.workExperiences.concat(action.payload)
+      }
     default:
       return state;
   }

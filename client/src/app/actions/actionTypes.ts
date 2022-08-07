@@ -25,4 +25,5 @@ export const ProfileActionType = {
   ADD_NEW_PROFILE: actionGenerator("ADD_NEW_PROFILE"),
   UPDATE_PROFILE: actionGenerator("UPDATE_PROFILE"),
   DELETE_PROFILE: actionGenerator("DELETE_PROFILE"),
+  ADD_PROFILE_EXPERIENCE: "ADD_PROFILE_EXPERIENCE"
 };

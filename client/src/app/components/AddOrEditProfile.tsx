@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getOneProfile } from "../actions/profileActions";
+import { addProfile, addProfileExperience, getOneProfile } from "../actions/profileActions";
 import { ProfileDto, WorkExperience } from "../dtos/profile";
 import { useAppSelector, useAppDispatch } from "../hooks";
 import ModalComponent from './ModalComponent'
 
 const AddOrEditProfile = () => {
-  const profile = useAppSelector((state) => state.profile.profile);
+  const profile =
+    useAppSelector((state) => state.profile.profile);
+  const workExperiences =
+    useAppSelector((state) => state.profile.workExperiences);
   const dispatch = useAppDispatch();
   const { id } = useParams();
 
   let [showModal, handleModal] = useState(false);
-  let [workExperience, addWorkExperience] = useState({} as { [key: string]: string; });
-  let [tempProfile, addTempProfile] = useState(profile || {} as ProfileDto);
-
+  let [fieldValues, updateInput] = useState({} as { [key: string]: string; });
 
   useEffect(() => {
     const profileId = id ? parseInt(id) : null;
@@ -24,23 +25,35 @@ const AddOrEditProfile = () => {
 
   const handleInput =
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      let wexp = workExperience;
-      wexp[e.target.name] = e.target.value;
-      addWorkExperience(wexp);
+      let updatedFields = fieldValues;
+      updatedFields[e.target.name] = e.target.value;
+      updateInput(updatedFields);
     }
 
   const handleSaveWorkExperience = () => {
     let wexp: WorkExperience = {
-      jobTitle: workExperience['jobTitle'],
-      jobDescription: workExperience['jobDescription'],
-      company: workExperience['company'],
-      companyLogo: workExperience['companyLogo'],
-      endDate: new Date(workExperience['endDate']),
-      startDate: new Date(workExperience['startDate']),
+      jobTitle: fieldValues['jobTitle'],
+      jobDescription: fieldValues['jobDescription'],
+      company: fieldValues['company'],
+      companyLogo: fieldValues['companyLogo'],
+      endDate: null,  //new Date(fieldValues['endDate']),
+      startDate: null,  //new Date(fieldValues['startDate']),
       isContinuing: false,
     };
-    tempProfile.workExperiences.concat(wexp);
+
+    dispatch(addProfileExperience(wexp))
     handleModal(false);
+  }
+
+  const onProfileSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // const addProfile: ProfileDto = {
+    //   name: fieldValues['name'],
+    //   age: parseInt(fieldValues['age']),
+    //   workExperiences: 
+
+    // }
+    // dispatch(addProfile());
   }
 
   const renderModalView = () => {
@@ -53,6 +66,7 @@ const AddOrEditProfile = () => {
               className="form-control"
               placeholder="Job Title"
               name="jobTitle"
+              required={true}
               onChange={(e) => handleInput(e)}
             />
           </div>
@@ -64,6 +78,7 @@ const AddOrEditProfile = () => {
               className="form-control"
               placeholder="Company name"
               name="companyName"
+              required={true}
               onChange={(e) => handleInput(e)}
             />
           </div>
@@ -75,7 +90,9 @@ const AddOrEditProfile = () => {
               placeholder="Job Description"
               rows={3}
               name="jobDescription"
-              onChange={(e) => handleInput(e)} />
+              required={true}
+              onChange={(e) => handleInput(e)}
+            />
           </div>
         </div>
         <div className="form row mb-3 mt-3">
@@ -85,6 +102,7 @@ const AddOrEditProfile = () => {
               className="form-control"
               placeholder="Start Date"
               name="startDate"
+              required={true}
               onChange={(e) => handleInput(e)}
             />
           </div>
@@ -94,6 +112,7 @@ const AddOrEditProfile = () => {
               className="form-control"
               placeholder="End Date"
               name="endDate"
+              required={true}
               onChange={(e) => handleInput(e)}
             />
           </div>
@@ -121,18 +140,18 @@ const AddOrEditProfile = () => {
         primaryBtnText={"Save"}
         onHandlePrimaryBtn={() => handleSaveWorkExperience()}
       >
-        {modalContent}
+        {showModal && modalContent}
       </ModalComponent>
     );
   }
 
-  const onClickDelete = (id: string) => {
+  const onClickDelete = (id: number) => {
 
   }
 
   const renderTable = () => {
     const rowData =
-      profile?.workExperiences?.map(
+      workExperiences.map(
         (wexp: WorkExperience, i: number) => {
           return (
             <tr key={"item_" + (i + 1)}>
@@ -142,7 +161,7 @@ const AddOrEditProfile = () => {
               <td>{wexp.startDate}</td>
               <td>{wexp.endDate}</td>
               <td className="text-center">
-                <button className="btn btn-sm" onClick={() => onClickDelete(wexp.id!)}>
+                <button className="btn btn-sm" onClick={() => onClickDelete(i)}>
                   <i className="fas fa-trash"></i>
                 </button>
               </td>
@@ -174,14 +193,14 @@ const AddOrEditProfile = () => {
           <h3 className="panel-title">Profile Information</h3>
         </div>
         <div className="panel-body">
-          <form>
+          <form onSubmit={(e) => onProfileSubmit(e)}>
             <div className="form-group row mb-3 mt-3">
               <label className="col-sm-2 col-form-label" htmlFor="inputName">Name</label>
               <div className="col-sm-10">
                 <input
                   type="name"
                   className="form-control"
-                  id="inputName"
+                  name="name"
                   placeholder="Enter name"
                   defaultValue={profile?.name}
                 />
@@ -193,7 +212,7 @@ const AddOrEditProfile = () => {
                 <input
                   type="number"
                   className="form-control"
-                  id="inputAge"
+                  name="age"
                   placeholder="Enter name"
                   defaultValue={profile?.age}
                 />
@@ -205,7 +224,7 @@ const AddOrEditProfile = () => {
                 <input
                   type="file"
                   className="form-control-file"
-                  id="controlFile" />
+                  name="profilePicture" />
               </div>
             </div>
             <div className="work-experience">
@@ -228,6 +247,5 @@ const AddOrEditProfile = () => {
     </div>
   )
 }
-
 
 export default AddOrEditProfile;
