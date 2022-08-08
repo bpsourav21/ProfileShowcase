@@ -5,11 +5,9 @@ import NotFound from "./components/NotFound";
 import Profiles from "./components/Profiles";
 import AddOrEditProfile from "./components/AddOrEditProfile";
 import { AuthProvider } from "./helpers/AuthProvider";
-import { useAppSelector } from "./hooks";
-import LoadingOverlay from "./components/LoadingOverlay";
+
 
 const App = () => {
-  const isLoading = useAppSelector((state) => state.profile.isLoading);
   return (
     <div className="container">
       <BrowserRouter>
@@ -24,7 +22,6 @@ const App = () => {
           </Routes>
         </AuthProvider>
       </BrowserRouter>
-      {isLoading && <LoadingOverlay />}
     </div>
   );
 };

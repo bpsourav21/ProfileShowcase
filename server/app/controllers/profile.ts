@@ -94,10 +94,6 @@ const upsertWorkExperience = (exp: WorkExperienceDto) => {
 // Update a Profile by the id in the request
 export const update = (req: Request, res: Response) => {
   const id = req.params.id;
-
-  console.log(req.body.workExperiences);
-
-
   const profile: ProfileDto = {
     name: req.body.name,
     age: req.body.age,
@@ -119,7 +115,7 @@ export const update = (req: Request, res: Response) => {
           message: "Profile was deleted successfully!"
         });
       }).catch(e => {
-        res.status(500).send({
+        res.status(400).send({
           message: "Error updating Profile with id=" + id
         });
       })

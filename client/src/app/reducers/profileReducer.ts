@@ -1,22 +1,27 @@
-import { ProfileActionType } from "../actions/actionTypes";
+import { Alert, ProfileActionType } from "../actions/actionTypes";
 import { ProfileDto, WorkExperience } from "../dtos/profile";
+
+export interface AlertType {
+  message: string;
+  state: "success" | "failed"
+}
 
 export interface ProfileState {
   isLoading: boolean;
-  errorMsg: string;
   allProfiles: ProfileDto[];
   profile: ProfileDto;
   workExperiences: WorkExperience[];
+  alert: AlertType | null
 }
 
 const emptyProfile = {} as ProfileDto;
 
 const initialState: ProfileState = {
   isLoading: false,
-  errorMsg: "",
   allProfiles: [],
   profile: emptyProfile,
-  workExperiences: []
+  workExperiences: [],
+  alert: null
 };
 
 export const profileReducer = (
@@ -72,6 +77,23 @@ export const profileReducer = (
         ...state,
         workExperiences: state.workExperiences.concat(action.payload)
       }
+
+    case Alert.SUCCESS:
+      return {
+        ...state,
+        alert: { message: action.payload, state: 'success' }
+      }
+    case Alert.FAILED:
+      return {
+        ...state,
+        alert: { message: action.payload, state: 'failed' }
+      }
+    case Alert.NONE:
+      return {
+        ...state,
+        alert: null
+      }
+
     default:
       return state;
   }

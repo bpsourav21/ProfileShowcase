@@ -27,3 +27,9 @@ export const ProfileActionType = {
   DELETE_PROFILE: actionGenerator("DELETE_PROFILE"),
   ADD_PROFILE_EXPERIENCE: "ADD_PROFILE_EXPERIENCE"
 };
+
+export const Alert = {
+  SUCCESS: "SUCCESS",
+  FAILED: "FAILED",
+  NONE: "NONE",
+};

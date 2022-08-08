@@ -1,0 +1,24 @@
+import classNames from "classnames";
+import { AlertType } from "../reducers/profileReducer";
+
+interface Props {
+  alert: AlertType
+}
+
+const AlertComponent = (props: Props) => {
+  const modalClass = classNames({
+    "alert": true,
+    "alert-success": props.alert.state === 'success',
+    "alert-danger": props.alert.state === 'failed'
+  });
+  return (
+    <div className="alertNotification">
+      <div className={modalClass} role="alert">
+        {props.alert.message}
+      </div>
+    </div>
+  );
+}
+
+export default AlertComponent;
+

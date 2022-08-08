@@ -2,7 +2,7 @@
 import { ProfileDto, WorkExperience } from "../dtos/profile";
 import apiService from "../service/apiService";
 import { AppDispatch } from "../store";
-import { ProfileActionType } from "./actionTypes";
+import { Alert, ProfileActionType } from "./actionTypes";
 
 export const getProfiles = () => {
   return (dispatch: AppDispatch) => {
@@ -55,7 +55,7 @@ export const getOneProfile = (id: number) => {
   };
 };
 
-export const addProfile = (profile: ProfileDto) => {
+export const addProfile = (profile: ProfileDto, cb?: VoidFunction) => {
   return (dispatch: AppDispatch) => {
     dispatch({ type: ProfileActionType.ADD_NEW_PROFILE.PROCESSING });
     apiService
@@ -66,21 +66,24 @@ export const addProfile = (profile: ProfileDto) => {
           type: ProfileActionType.ADD_NEW_PROFILE.SUCCESS,
           payload: data
         });
+        dispatch(onHandleAlert("Profile Added successfully", true));
+        if (cb) {
+          cb();
+        }
       })
       .catch((e) => {
         dispatch({
           type: ProfileActionType.ADD_NEW_PROFILE.FAILED,
           payload: e,
         });
+        dispatch(onHandleAlert("Profile Added failed", false));
       });
   };
 };
 
-export const updateProfile = (id: number, profile: ProfileDto) => {
+export const updateProfile = (id: number, profile: ProfileDto, cb?: VoidFunction) => {
   return (dispatch: AppDispatch) => {
     dispatch({ type: ProfileActionType.UPDATE_PROFILE.PROCESSING });
-    console.log("profile---------", profile);
-    
     apiService
       .put(`/profiles/` + id, profile)
       .then((res) => {
@@ -89,12 +92,17 @@ export const updateProfile = (id: number, profile: ProfileDto) => {
           type: ProfileActionType.UPDATE_PROFILE.SUCCESS,
           payload: data
         });
+        dispatch(onHandleAlert("Profile updated successfully", true));
+        if (cb) {
+          cb();
+        }
       })
       .catch((e) => {
         dispatch({
           type: ProfileActionType.UPDATE_PROFILE.FAILED,
           payload: e,
         });
+        dispatch(onHandleAlert("Profile updated failed", false));
       });
   };
 };
@@ -110,6 +118,7 @@ export const deleteProfile = (id: number) => {
           type: ProfileActionType.UPDATE_PROFILE.SUCCESS,
           payload: data
         });
+        dispatch(onHandleAlert("Profile deleted successfully", true));
         dispatch(getProfiles());
       })
       .catch((e) => {
@@ -117,6 +126,19 @@ export const deleteProfile = (id: number) => {
           type: ProfileActionType.UPDATE_PROFILE.FAILED,
           payload: e,
         });
+        dispatch(onHandleAlert("Profile deleted failed", false));
       });
+  };
+};
+
+export const onHandleAlert = (msg: string, isSuccess: boolean = true) => {
+  return (dispatch: AppDispatch) => {
+    dispatch({
+      type: isSuccess ? Alert.SUCCESS : Alert.FAILED,
+      payload: msg
+    });
+    setTimeout(() => {
+      dispatch({ type: Alert.NONE });
+    }, 3000)
   };
 };

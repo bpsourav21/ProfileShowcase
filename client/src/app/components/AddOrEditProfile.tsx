@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { addProfile, addProfileExperience, getOneProfile, updateProfile } from "../actions/profileActions";
 import { ProfileDto, WorkExperience } from "../dtos/profile";
 import { useAppSelector, useAppDispatch } from "../hooks";
@@ -10,6 +10,8 @@ const AddOrEditProfile = () => {
     useAppSelector((state) => state.profile.profile);
   const workExperiences =
     useAppSelector((state) => state.profile.workExperiences);
+  const navigate = useNavigate();
+
   const dispatch = useAppDispatch();
   const { id } = useParams();
   const profileId = id ? parseInt(id) : null;
@@ -56,10 +58,10 @@ const AddOrEditProfile = () => {
     }
 
     if (profileId) {
-      dispatch(updateProfile(profileId, currProfile));
+      dispatch(updateProfile(profileId, currProfile, () => navigate('/')));
     }
     else {
-      dispatch(addProfile(currProfile));
+      dispatch(addProfile(currProfile, () => navigate('/')));
     }
   }
 
@@ -84,7 +86,7 @@ const AddOrEditProfile = () => {
               type="text"
               className="form-control"
               placeholder="Company name"
-              name="companyName"
+              name="company"
               required={true}
               onChange={(e) => handleInput(e)}
             />
@@ -152,10 +154,6 @@ const AddOrEditProfile = () => {
     );
   }
 
-  const onClickDelete = (id: number) => {
-
-  }
-
   const renderTable = () => {
     const rowData =
       workExperiences.map(
@@ -167,11 +165,6 @@ const AddOrEditProfile = () => {
               <td>{wexp.jobDescription}</td>
               <td>{wexp.startDate}</td>
               <td>{wexp.endDate}</td>
-              <td className="text-center">
-                <button className="btn btn-sm" onClick={() => onClickDelete(i)}>
-                  <i className="fas fa-trash"></i>
-                </button>
-              </td>
             </tr>
           );
         });
@@ -185,7 +178,6 @@ const AddOrEditProfile = () => {
             <th>Job description</th>
             <th>Start date</th>
             <th>End date</th>
-            <th className="text-center">Action</th>
           </tr>
         </thead>
         <tbody>{rowData}</tbody>
