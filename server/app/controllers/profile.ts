@@ -25,7 +25,7 @@ export const create = (req: Request, res: Response) => {
   // Save Profile in the database
   ProfileModel.create(profile)
     .then((data) => {
-      const experiences: WorkExperienceDto[] = req.body.experience.map(
+      const experiences: WorkExperienceDto[] = req.body.workExperiences.map(
         (exp: WorkExperienceDto) => {
           exp.expId = data.id;
           return exp;
@@ -83,24 +83,52 @@ export const findOne = (req: Request, res: Response) => {
     });
 };
 
+const upsertWorkExperience = (exp: WorkExperienceDto) => {
+  return new Promise((resolve, reject) => {
+    WorkExperienceModel.upsert(exp)
+      .then((result) => resolve(result))
+      .catch((err) => reject(err));
+  });
+};
+
 // Update a Profile by the id in the request
 export const update = (req: Request, res: Response) => {
   const id = req.params.id;
 
-  ProfileModel.update(req.body, {
+  console.log(req.body.workExperiences);
+
+
+  const profile: ProfileDto = {
+    name: req.body.name,
+    age: req.body.age,
+    profilePicture: req.body.profilePicture,
+  };
+
+  ProfileModel.update(profile, {
     where: { id: id }
+  }).then(num => {
+    if (num[0] == 1) {
+      const experiences: WorkExperienceDto[] = req.body.workExperiences.map(
+        (exp: WorkExperienceDto) => {
+          exp.expId = parseInt(id);
+          return upsertWorkExperience(exp);
+        }
+      );
+      Promise.all(experiences).then(() => {
+        res.send({
+          message: "Profile was deleted successfully!"
+        });
+      }).catch(e => {
+        res.status(500).send({
+          message: "Error updating Profile with id=" + id
+        });
+      })
+    } else {
+      res.status(400).send({
+        message: `Cannot update Profile with id=${id}. Maybe ProfileModel was not found or req.body is empty!`
+      });
+    }
   })
-    .then(num => {
-      if (num[0] == 1) {
-        res.send({
-          message: "Profile was updated successfully."
-        });
-      } else {
-        res.send({
-          message: `Cannot update Profile with id=${id}. Maybe ProfileModel was not found or req.body is empty!`
-        });
-      }
-    })
     .catch(err => {
       res.status(500).send({
         message: "Error updating Profile with id=" + id

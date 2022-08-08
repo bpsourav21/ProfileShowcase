@@ -55,17 +55,9 @@ export const getOneProfile = (id: number) => {
   };
 };
 
-export const addProfile = () => {
+export const addProfile = (profile: ProfileDto) => {
   return (dispatch: AppDispatch) => {
     dispatch({ type: ProfileActionType.ADD_NEW_PROFILE.PROCESSING });
-    const profile = {
-      "name": "mahadi hasan",
-      "age": 30,
-      "experience": [{
-        "jobTitle": "engineer"
-      }]
-    };
-
     apiService
       .post(`/profiles/`, profile)
       .then((res) => {
@@ -84,11 +76,13 @@ export const addProfile = () => {
   };
 };
 
-export const updateProfile = (id: number) => {
+export const updateProfile = (id: number, profile: ProfileDto) => {
   return (dispatch: AppDispatch) => {
     dispatch({ type: ProfileActionType.UPDATE_PROFILE.PROCESSING });
+    console.log("profile---------", profile);
+    
     apiService
-      .put(`/profiles/` + id)
+      .put(`/profiles/` + id, profile)
       .then((res) => {
         const data = res.data;
         dispatch({

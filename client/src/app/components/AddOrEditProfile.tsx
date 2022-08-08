@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { addProfile, addProfileExperience, getOneProfile } from "../actions/profileActions";
+import { addProfile, addProfileExperience, getOneProfile, updateProfile } from "../actions/profileActions";
 import { ProfileDto, WorkExperience } from "../dtos/profile";
 import { useAppSelector, useAppDispatch } from "../hooks";
 import ModalComponent from './ModalComponent'
@@ -12,12 +12,12 @@ const AddOrEditProfile = () => {
     useAppSelector((state) => state.profile.workExperiences);
   const dispatch = useAppDispatch();
   const { id } = useParams();
+  const profileId = id ? parseInt(id) : null;
 
   let [showModal, handleModal] = useState(false);
   let [fieldValues, updateInput] = useState({} as { [key: string]: string; });
 
   useEffect(() => {
-    const profileId = id ? parseInt(id) : null;
     if (profileId) {
       dispatch(getOneProfile(profileId));
     }
@@ -47,13 +47,20 @@ const AddOrEditProfile = () => {
 
   const onProfileSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // const addProfile: ProfileDto = {
-    //   name: fieldValues['name'],
-    //   age: parseInt(fieldValues['age']),
-    //   workExperiences: 
+    const currProfile: ProfileDto = {
+      id: 0,
+      name: fieldValues['name'],
+      age: parseInt(fieldValues['age']),
+      profilePicture: null,
+      workExperiences: workExperiences,
+    }
 
-    // }
-    // dispatch(addProfile());
+    if (profileId) {
+      dispatch(updateProfile(profileId, currProfile));
+    }
+    else {
+      dispatch(addProfile(currProfile));
+    }
   }
 
   const renderModalView = () => {
@@ -202,6 +209,7 @@ const AddOrEditProfile = () => {
                   className="form-control"
                   name="name"
                   placeholder="Enter name"
+                  onChange={(e) => handleInput(e)}
                   defaultValue={profile?.name}
                 />
               </div>
@@ -213,7 +221,8 @@ const AddOrEditProfile = () => {
                   type="number"
                   className="form-control"
                   name="age"
-                  placeholder="Enter name"
+                  placeholder="Enter age"
+                  onChange={(e) => handleInput(e)}
                   defaultValue={profile?.age}
                 />
               </div>
