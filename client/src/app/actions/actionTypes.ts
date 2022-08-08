@@ -12,13 +12,7 @@ const actionGenerator = (action: string): RequestState => {
     FAILED: processedAction + "FAILED"
   }
 }
-export const Auth = {
-  LOGIN_REQUEST: "LOGIN_REQUEST",
-  LOGIN_SUCCESS: "LOGIN_SUCCESS",
-  LOGIN_FAILED: "LOGIN_FAILED",
-  LOGOUT_REQUEST: "LOGOUT_REQUEST",
-  AUTHENTICATION_REQUEST: "AUTHENTICATION_REQUEST",
-};
+
 export const ProfileActionType = {
   GET_ALL_PROFILES: actionGenerator("GET_ALL_PROFILES"),
   GET_PROFILE: actionGenerator("GET_PROFILE"),
