@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { addProfile, addProfileExperience, getOneProfile, updateProfile } from "../actions/profileActions";
-import { ProfileDto, WorkExperience } from "../dtos/profile";
+import { addProfile, addProfileExperience, getOneProfile, onHandleAlert, updateProfile } from "../actions/profileActions";
+import { Picture, ProfileDto, WorkExperience } from "../dtos/profile";
 import { useAppSelector, useAppDispatch } from "../hooks";
+import ImageUploaderComponent from "./ImageUploaderComponent";
 import ModalComponent from './ModalComponent'
 
 const AddOrEditProfile = () => {
@@ -17,7 +18,8 @@ const AddOrEditProfile = () => {
   const profileId = id ? parseInt(id) : null;
 
   let [showModal, handleModal] = useState(false);
-  let [fieldValues, updateInput] = useState({} as { [key: string]: string; });
+  let [proPic, updateProfilePicture] = useState(null as Picture);
+  let [companyLogo, updateCompanyLogo] = useState(null as Picture);
 
   useEffect(() => {
     if (profileId) {
@@ -25,21 +27,15 @@ const AddOrEditProfile = () => {
     }
   }, []);
 
-  const handleInput =
-    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      let updatedFields = fieldValues;
-      updatedFields[e.target.name] = e.target.value;
-      updateInput(updatedFields);
-    }
-
-  const handleSaveWorkExperience = () => {
+  const handleSaveWorkExperience = (e: React.FormEvent<HTMLFormElement>) => {
+    var target = e.currentTarget as HTMLFormElement;
     let wexp: WorkExperience = {
-      jobTitle: fieldValues['jobTitle'],
-      jobDescription: fieldValues['jobDescription'],
-      company: fieldValues['company'],
-      companyLogo: fieldValues['companyLogo'],
-      endDate: null,  //new Date(fieldValues['endDate']),
-      startDate: null,  //new Date(fieldValues['startDate']),
+      jobTitle: target.jobTitle.value,
+      jobDescription: target.jobDescription.value,
+      company: target.company.value,
+      companyLogo: companyLogo,
+      endDate: null,  //new Date(target.endDate.value,),
+      startDate: null,  //new Date(target.startDate.value,),
       isContinuing: false,
     };
 
@@ -49,11 +45,13 @@ const AddOrEditProfile = () => {
 
   const onProfileSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    var target = e.currentTarget as HTMLFormElement;
+
     const currProfile: ProfileDto = {
       id: 0,
-      name: fieldValues['name'],
-      age: parseInt(fieldValues['age']),
-      profilePicture: null,
+      name: target.fullName.value,
+      age: target.age.value,
+      profilePicture: proPic,
       workExperiences: workExperiences,
     }
 
@@ -67,7 +65,7 @@ const AddOrEditProfile = () => {
 
   const renderModalView = () => {
     let modalContent = (
-      <form>
+      <form onSubmit={(e) => handleSaveWorkExperience(e)}>
         <div className="form row mb-3 mt-3">
           <div className="col">
             <input
@@ -76,7 +74,6 @@ const AddOrEditProfile = () => {
               placeholder="Job Title"
               name="jobTitle"
               required={true}
-              onChange={(e) => handleInput(e)}
             />
           </div>
         </div>
@@ -88,7 +85,6 @@ const AddOrEditProfile = () => {
               placeholder="Company name"
               name="company"
               required={true}
-              onChange={(e) => handleInput(e)}
             />
           </div>
         </div>
@@ -100,7 +96,6 @@ const AddOrEditProfile = () => {
               rows={3}
               name="jobDescription"
               required={true}
-              onChange={(e) => handleInput(e)}
             />
           </div>
         </div>
@@ -112,7 +107,6 @@ const AddOrEditProfile = () => {
               placeholder="Start Date"
               name="startDate"
               required={true}
-              onChange={(e) => handleInput(e)}
             />
           </div>
           <div className="col">
@@ -122,20 +116,20 @@ const AddOrEditProfile = () => {
               placeholder="End Date"
               name="endDate"
               required={true}
-              onChange={(e) => handleInput(e)}
             />
           </div>
         </div>
         <div className="form row mb-3 mt-3">
-          <label className="col-sm-2 col-form-label" htmlFor="controlFile">Company Logo</label>
-          <div className="col-sm-10">
-            <input
-              type="file"
-              className="form-control-file"
-              id="controlFile"
-              name="company"
-              onChange={(e) => handleInput(e)} />
+          <div className="col">
+            <ImageUploaderComponent
+              label={"Upload Company Logo"}
+              onUploadImage={(imgSrc) => updateCompanyLogo(imgSrc)}
+            />
           </div>
+        </div>
+        <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+          <button type="button" onClick={() => handleModal(false)} className="btn btn-secondary me-md-2">Close</button>
+          <button type="submit" className="btn btn-primary">Save</button>
         </div>
       </form>
     )
@@ -145,9 +139,6 @@ const AddOrEditProfile = () => {
         showModal={showModal}
         onCloseModal={() => handleModal(false)}
         title={"Add experience"}
-        showFooter={true}
-        primaryBtnText={"Save"}
-        onHandlePrimaryBtn={() => handleSaveWorkExperience()}
       >
         {showModal && modalContent}
       </ModalComponent>
@@ -199,9 +190,9 @@ const AddOrEditProfile = () => {
                 <input
                   type="name"
                   className="form-control"
-                  name="name"
+                  name="fullName"
                   placeholder="Enter name"
-                  onChange={(e) => handleInput(e)}
+                  required={true}
                   defaultValue={profile?.name}
                 />
               </div>
@@ -214,7 +205,7 @@ const AddOrEditProfile = () => {
                   className="form-control"
                   name="age"
                   placeholder="Enter age"
-                  onChange={(e) => handleInput(e)}
+                  required={true}
                   defaultValue={profile?.age}
                 />
               </div>
@@ -222,10 +213,10 @@ const AddOrEditProfile = () => {
             <div className="form-group row mb-3 mt-3">
               <label className="col-sm-2 col-form-label" htmlFor="controlFile">Profile Picture</label>
               <div className="col-sm-10">
-                <input
-                  type="file"
-                  className="form-control-file"
-                  name="profilePicture" />
+                <ImageUploaderComponent
+                  label={"Upload Profile Photo"}
+                  onUploadImage={(imgSrc) => updateProfilePicture(imgSrc)}
+                />
               </div>
             </div>
             <div className="work-experience">
@@ -250,3 +241,4 @@ const AddOrEditProfile = () => {
 }
 
 export default AddOrEditProfile;
+

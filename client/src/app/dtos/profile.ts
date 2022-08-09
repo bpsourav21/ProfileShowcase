@@ -1,8 +1,9 @@
+export type Picture = string | ArrayBuffer | null;
 export interface ProfileDto {
   id: number
   name: string;
   age: number;
-  profilePicture: string | null;
+  profilePicture: Picture;
   createdAt?: Date;
   updatedAt?: Date;
   workExperiences: WorkExperience[];
@@ -12,7 +13,7 @@ export interface WorkExperience {
   id?: string
   jobTitle: string;
   company: string | null;
-  companyLogo: string | null;
+  companyLogo: Picture;
   jobDescription: string | null;
   startDate: Date | null;
   endDate: Date | null;
