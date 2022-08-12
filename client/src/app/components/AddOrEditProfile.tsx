@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { addProfile, addProfileExperience, getOneProfile, onHandleAlert, updateProfile } from "../actions/profileActions";
+import { addProfile, addProfileExperience, getOneProfile, onHandleAlert, resetProfile, updateProfile } from "../actions/profileActions";
 import { Picture, ProfileDto, WorkExperience } from "../dtos/profile";
 import { useAppSelector, useAppDispatch } from "../hooks";
 import ImageUploaderComponent from "./ImageUploaderComponent";
@@ -25,17 +25,22 @@ const AddOrEditProfile = () => {
     if (profileId) {
       dispatch(getOneProfile(profileId));
     }
+
+    return () => {
+      dispatch(resetProfile())
+    }
   }, []);
 
   const handleSaveWorkExperience = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     var target = e.currentTarget as HTMLFormElement;
     let wexp: WorkExperience = {
       jobTitle: target.jobTitle.value,
       jobDescription: target.jobDescription.value,
       company: target.company.value,
-      companyLogo: companyLogo,
-      endDate: null,  //new Date(target.endDate.value,),
-      startDate: null,  //new Date(target.startDate.value,),
+      companyLogo: null,
+      endDate: target.endDate.value,
+      startDate: target.startDate.value,
       isContinuing: false,
     };
 
@@ -51,7 +56,7 @@ const AddOrEditProfile = () => {
       id: 0,
       name: target.fullName.value,
       age: target.age.value,
-      profilePicture: proPic,
+      profilePicture: null,
       workExperiences: workExperiences,
     }
 
@@ -145,6 +150,12 @@ const AddOrEditProfile = () => {
     );
   }
 
+  const getFormattedDate = (date: Date | null) => {
+    return date == null
+      ? ""
+      : new Date(date).toLocaleDateString();
+  }
+
   const renderTable = () => {
     const rowData =
       workExperiences.map(
@@ -154,8 +165,8 @@ const AddOrEditProfile = () => {
               <td>{wexp.jobTitle}</td>
               <td>{wexp.company}</td>
               <td>{wexp.jobDescription}</td>
-              <td>{wexp.startDate}</td>
-              <td>{wexp.endDate}</td>
+              <td>{getFormattedDate(wexp.startDate)}</td>
+              <td>{getFormattedDate(wexp.endDate)}</td>
             </tr>
           );
         });

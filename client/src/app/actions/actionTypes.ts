@@ -2,6 +2,7 @@ interface RequestState {
   PROCESSING: string;
   SUCCESS: string;
   FAILED: string;
+  RESET: string;
 }
 
 const actionGenerator = (action: string): RequestState => {
@@ -9,7 +10,8 @@ const actionGenerator = (action: string): RequestState => {
   return {
     PROCESSING: processedAction + "PROCESSING",
     SUCCESS: processedAction + "SUCCESS",
-    FAILED: processedAction + "FAILED"
+    FAILED: processedAction + "FAILED",
+    RESET: processedAction + "RESET",
   }
 }
 

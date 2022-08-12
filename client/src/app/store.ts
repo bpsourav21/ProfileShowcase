@@ -4,7 +4,7 @@ import { profileReducer } from "./reducers/profileReducer";
 export const store = configureStore({
   reducer: {
     profile: profileReducer,
-  },
+  }
 });
 
 export type AppDispatch = typeof store.dispatch;

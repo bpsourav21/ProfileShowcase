@@ -14,7 +14,7 @@ export interface ProfileState {
   alert: AlertType | null
 }
 
-const emptyProfile = {} as ProfileDto;
+const emptyProfile = { name: "" } as ProfileDto;
 
 const initialState: ProfileState = {
   isLoading: false,
@@ -64,6 +64,7 @@ export const profileReducer = (
         isLoading: false,
       };
     }
+    case ProfileActionType.GET_PROFILE.RESET:
     case ProfileActionType.GET_PROFILE.FAILED:
       return {
         ...state,

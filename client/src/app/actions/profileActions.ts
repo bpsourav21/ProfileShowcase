@@ -34,6 +34,12 @@ export const addProfileExperience = (workExperience: WorkExperience) => {
   };
 }
 
+export const resetProfile = () => {
+  return (dispatch: AppDispatch) => {
+    dispatch({ type: ProfileActionType.GET_PROFILE.RESET });
+  }
+}
+
 export const getOneProfile = (id: number) => {
   return (dispatch: AppDispatch) => {
     dispatch({ type: ProfileActionType.GET_PROFILE.PROCESSING });
