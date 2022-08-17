@@ -1,19 +1,26 @@
-export type Picture = string | ArrayBuffer | null;
+export interface PictureDto {
+  id: string;
+  imageName: string;
+  mimetype: string;
+  updatedAt?: Date;
+  createdAt?: Date;
+};
+
 export interface ProfileDto {
-  id: number
+  id: number;
   name: string;
   age: number;
-  profilePicture: Picture;
+  picId: string;
   createdAt?: Date;
   updatedAt?: Date;
   workExperiences: WorkExperience[];
 }
 
 export interface WorkExperience {
-  id?: string
+  id?: string;
   jobTitle: string;
   company: string | null;
-  companyLogo: Picture;
+  companyLogo: PictureDto | null;
   jobDescription: string | null;
   startDate: Date | null;
   endDate: Date | null;

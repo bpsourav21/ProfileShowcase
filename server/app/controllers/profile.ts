@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { PictureModel } from "../models/Picture";
 import { ProfileModel, ProfileDto } from "../models/Profile";
 import {
   WorkExperienceDto,
@@ -19,7 +20,7 @@ export const create = (req: Request, res: Response) => {
   const profile: ProfileDto = {
     name: req.body.name,
     age: req.body.age,
-    profilePicture: null,
+   picId: req.body.picId
   };
 
   // Save Profile in the database
@@ -56,7 +57,7 @@ export const findAll = (req: Request, res: Response) => {
   const name = req.query.name;
   // var condition = name ? { name: { [Op.iLike]: `%${name}%` } } : null;
 
-  ProfileModel.findAll({ include: WorkExperienceModel })
+  ProfileModel.findAll({ include: [WorkExperienceModel, PictureModel] })
     .then((data) => {
       res.send(data);
     })
@@ -97,7 +98,7 @@ export const update = (req: Request, res: Response) => {
   const profile: ProfileDto = {
     name: req.body.name,
     age: req.body.age,
-    profilePicture: req.body.profilePicture,
+    picId: req.body.picId
   };
 
   ProfileModel.update(profile, {

@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 // Initialize dot env configuration
 dotenv.config();
 
-import express, { Request, Response } from "express";
+import express from "express";
 import routes from "./app/routes";
 import cors from "cors";
 import path from 'path';
@@ -30,6 +30,9 @@ const initAppConfig = () => {
 
   // application routes
   app.use("/api", routes);
+
+  //static Images Folder
+  app.use('/uploads', express.static(path.join(__dirname, './uploads')))
 
   // Serve any static files
   app.use(express.static(path.join(__dirname, '../client/build')));

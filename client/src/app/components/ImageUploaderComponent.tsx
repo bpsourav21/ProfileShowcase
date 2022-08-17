@@ -1,13 +1,15 @@
 import classNames from "classnames";
 import { useState } from "react";
-import { Picture } from "../dtos/profile";
+import { PictureDto } from "../dtos/profile";
+import apiService from "../service/apiService";
 
+type UploadPicture = string | ArrayBuffer | null;
 interface Props {
     label?: string;
-    onUploadImage: (imgSrc: Picture) => void;
+    onUploadImage: (picture: PictureDto) => void;
 }
 
-const convertBase64 = (file: any): Promise<Picture> => {
+const convertBase64 = (file: any): Promise<UploadPicture> => {
     return new Promise((resolve, reject) => {
         const fileReader = new FileReader();
         fileReader.readAsDataURL(file);
@@ -23,18 +25,28 @@ const convertBase64 = (file: any): Promise<Picture> => {
 };
 
 const ImageUploaderComponent = (props: Props) => {
-    let [imgSrc, updateImage] = useState(null as Picture);
+    let [imgSrc, updateImage] = useState(null as UploadPicture);
 
     const uploadImage = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files && event.target.files[0];
         if (file) {
             const base64 = await convertBase64(file);
             updateImage(base64);
-            props.onUploadImage(base64);
+            let formData = new FormData();
+            formData.append("picture", file);
+            apiService
+                .post(`/uploadImage/`, formData)
+                .then((res) => {
+                    const data: PictureDto = res.data;
+                    props.onUploadImage(data);
+
+                })
+                .catch(e => {
+                    updateImage(null);
+                })
         }
         else {
             updateImage(null);
-            props.onUploadImage(null);
         }
     };
 

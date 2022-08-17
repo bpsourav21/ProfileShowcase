@@ -6,6 +6,7 @@ import {
   CreationOptional,
 } from "sequelize";
 import sequelize from "../db/index";
+import { PictureModel } from "./Picture";
 import { WorkExperienceModel } from "./WorkExperience";
 
 export type ProfileAttribute = InferAttributes<ProfileModel>;
@@ -15,7 +16,7 @@ interface ProfileModel extends Model<ProfileAttribute, ProfileDto> {
   id: CreationOptional<number>;
   name: string;
   age: number;
-  profilePicture: string | null;
+  picId: string;
   // Timestamps
   createdAt?: Date;
   updatedAt?: Date;
@@ -29,6 +30,7 @@ export const ProfileModel = sequelize.define<ProfileModel>(
       autoIncrement: true,
       allowNull: false,
       primaryKey: true,
+      unique: true
     },
     name: {
       type: DataTypes.STRING,
@@ -38,8 +40,12 @@ export const ProfileModel = sequelize.define<ProfileModel>(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    profilePicture: {
-      type: DataTypes.BLOB,
+    picId: {
+      type: DataTypes.UUID,
+      references: {
+        model: PictureModel,
+        key: "id",
+      },
     },
   },
   {
@@ -48,3 +54,4 @@ export const ProfileModel = sequelize.define<ProfileModel>(
 );
 
 ProfileModel.hasMany(WorkExperienceModel, { foreignKey: "expId" });
+ProfileModel.belongsTo(PictureModel, { foreignKey: "picId" })

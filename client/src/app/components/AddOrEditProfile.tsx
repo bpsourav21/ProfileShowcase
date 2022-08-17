@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { addProfile, addProfileExperience, getOneProfile, onHandleAlert, resetProfile, updateProfile } from "../actions/profileActions";
-import { Picture, ProfileDto, WorkExperience } from "../dtos/profile";
+import { addProfile, addProfileExperience, getOneProfile, resetProfile, updateProfile } from "../actions/profileActions";
+import { PictureDto, ProfileDto, WorkExperience } from "../dtos/profile";
 import { useAppSelector, useAppDispatch } from "../hooks";
 import ImageUploaderComponent from "./ImageUploaderComponent";
 import ModalComponent from './ModalComponent'
@@ -18,8 +18,8 @@ const AddOrEditProfile = () => {
   const profileId = id ? parseInt(id) : null;
 
   let [showModal, handleModal] = useState(false);
-  let [proPic, updateProfilePicture] = useState(null as Picture);
-  let [companyLogo, updateCompanyLogo] = useState(null as Picture);
+  let [proPic, updateProfilePicture] = useState<PictureDto | null>(null);
+  let [companyLogo, updateCompanyLogo] = useState<PictureDto | null>(null);
 
   useEffect(() => {
     if (profileId) {
@@ -56,7 +56,7 @@ const AddOrEditProfile = () => {
       id: 0,
       name: target.fullName.value,
       age: target.age.value,
-      profilePicture: null,
+      picId: proPic ? proPic.id : "",
       workExperiences: workExperiences,
     }
 
@@ -128,7 +128,7 @@ const AddOrEditProfile = () => {
           <div className="col">
             <ImageUploaderComponent
               label={"Upload Company Logo"}
-              onUploadImage={(imgSrc) => updateCompanyLogo(imgSrc)}
+              onUploadImage={(picture) => updateCompanyLogo(picture)}
             />
           </div>
         </div>
@@ -194,7 +194,9 @@ const AddOrEditProfile = () => {
           <h3 className="panel-title">Profile Information</h3>
         </div>
         <div className="panel-body">
-          <form onSubmit={(e) => onProfileSubmit(e)}>
+          <form onSubmit={(e) => onProfileSubmit(e)}
+            method="POST"
+            encType="multipart/form-data">
             <div className="form-group row mb-3 mt-3">
               <label className="col-sm-2 col-form-label" htmlFor="inputName">Name</label>
               <div className="col-sm-10">
@@ -226,7 +228,7 @@ const AddOrEditProfile = () => {
               <div className="col-sm-10">
                 <ImageUploaderComponent
                   label={"Upload Profile Photo"}
-                  onUploadImage={(imgSrc) => updateProfilePicture(imgSrc)}
+                  onUploadImage={(picture) => updateProfilePicture(picture)}
                 />
               </div>
             </div>

@@ -34,6 +34,7 @@ export const WorkExperienceModel = sequelize.define<WorkExperienceModel>(
       defaultValue: DataTypes.UUIDV4,
       allowNull: false,
       primaryKey: true,
+      unique: true
     },
     jobTitle: {
       type: DataTypes.STRING,
@@ -43,7 +44,7 @@ export const WorkExperienceModel = sequelize.define<WorkExperienceModel>(
       type: DataTypes.STRING,
     },
     companyLogo: {
-      type: DataTypes.BLOB,
+      type: DataTypes.BLOB("long"),
     },
     jobDescription: {
       type: DataTypes.STRING,

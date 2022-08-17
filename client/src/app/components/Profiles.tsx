@@ -26,7 +26,7 @@ const Profiles = () => {
           <td>{profile.id}</td>
           <td>{profile.name}</td>
           <td>{profile.age}</td>
-          <td>{profile.profilePicture}</td>
+          <td>{"profile.profilePicture"}</td>
           <td className="text-center">
             <button className="btn btn-sm" onClick={() => navigate("/edit-profile/" + profile.id)}>
               <i className="fas fa-edit"></i>
