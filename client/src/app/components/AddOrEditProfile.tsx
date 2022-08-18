@@ -22,7 +22,7 @@ const AddOrEditProfile = () => {
   let [showModal, handleModal] = useState(false);
   let [proPic, updateProfilePicture] = useState<PictureDto | null>(null);
   let [companyLogo, updateCompanyLogo] = useState<PictureDto | null>(null);
-
+  let [isContinuing, updateIsContinuing] = useState<boolean>(false);
   useEffect(() => {
     if (profileId) {
       dispatch(getOneProfile(profileId));
@@ -46,9 +46,9 @@ const AddOrEditProfile = () => {
       jobDescription: target.jobDescription.value,
       company: target.company.value,
       companyLogo: companyLogo, // need to improve this
-      endDate: target.endDate.value,
+      endDate: isContinuing ? null : target.endDate.value,
       startDate: target.startDate.value,
-      isContinuing: false,
+      isContinuing: isContinuing,
       logoId: companyLogo ? companyLogo.id : ""
     };
 
@@ -115,6 +115,7 @@ const AddOrEditProfile = () => {
         </div>
         <div className="form row mb-3 mt-3">
           <div className="col">
+            <label>Start Date</label>
             <input
               type="date"
               className="form-control"
@@ -124,13 +125,33 @@ const AddOrEditProfile = () => {
             />
           </div>
           <div className="col">
+            <label>End Date</label>
             <input
               type="date"
               className="form-control"
               placeholder="End Date"
               name="endDate"
-              required={true}
+              disabled={isContinuing}
             />
+          </div>
+        </div>
+        <div className="form row mb-3 mt-3">
+          <div className="col">
+            <div className="form-check form-check-inline">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                placeholder="Is continuing"
+                name="isContinuing"
+                id="isContinuing"
+                checked={isContinuing}
+                onChange={() => updateIsContinuing(!isContinuing)}
+              />
+              <label className="form-check-label"
+                htmlFor="isContinuing">
+                Is still continuing?
+              </label>
+            </div>
           </div>
         </div>
         <div className="form row mb-3 mt-3">
@@ -182,7 +203,9 @@ const AddOrEditProfile = () => {
               <td>{wexp.company}</td>
               <td>{wexp.jobDescription}</td>
               <td>{getFormattedDate(wexp.startDate)}</td>
-              <td>{getFormattedDate(wexp.endDate)}</td>
+              <td>{wexp.isContinuing
+                ? <span style={{ fontSize: 12, color: "green" }}>continuing</span>
+                : getFormattedDate(wexp.endDate)}</td>
             </tr>
           );
         });

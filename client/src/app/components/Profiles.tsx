@@ -32,7 +32,7 @@ const Profiles = () => {
             />
           </td>
           <td>{profile.name}</td>
-          <td width={50}>{profile.age}</td>
+          <td width={100}>{profile.age}</td>
           <td width={100} className="text-center">
             <button className="btn btn-sm" onClick={() => navigate("/edit-profile/" + profile.id)}>
               <i className="fas fa-edit"></i>
