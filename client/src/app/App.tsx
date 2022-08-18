@@ -4,6 +4,7 @@ import "./App.css";
 import NotFound from "./components/NotFound";
 import Profiles from "./components/Profiles";
 import AddOrEditProfile from "./components/AddOrEditProfile";
+import React from "react";
 
 const App = () => {
   return (

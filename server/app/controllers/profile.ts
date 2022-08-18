@@ -20,7 +20,7 @@ export const create = (req: Request, res: Response) => {
   const profile: ProfileDto = {
     name: req.body.name,
     age: req.body.age,
-   picId: req.body.picId
+    picId: req.body.picId
   };
 
   // Save Profile in the database
@@ -57,7 +57,11 @@ export const findAll = (req: Request, res: Response) => {
   const name = req.query.name;
   // var condition = name ? { name: { [Op.iLike]: `%${name}%` } } : null;
 
-  ProfileModel.findAll({ include: [WorkExperienceModel, PictureModel] })
+  ProfileModel.findAll({
+    include: [
+      { model: PictureModel, as: "profilePicture" }
+    ]
+  })
     .then((data) => {
       res.send(data);
     })
@@ -73,11 +77,22 @@ export const findAll = (req: Request, res: Response) => {
 export const findOne = (req: Request, res: Response) => {
   const id = req.params.id;
 
-  ProfileModel.findByPk(id, { include: WorkExperienceModel })
+  ProfileModel.findByPk(id, {
+    include: [
+      {
+        model: WorkExperienceModel, as: "workExperiences", include: [
+          { model: PictureModel, as: "companyLogo" }
+        ]
+      },
+      { model: PictureModel, as: "profilePicture" }
+    ]
+  })
     .then(data => {
       res.send(data);
     })
     .catch(err => {
+      console.log(err);
+
       res.status(500).send({
         message: "Error retrieving Profile with id=" + id
       });

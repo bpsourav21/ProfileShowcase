@@ -53,5 +53,5 @@ export const ProfileModel = sequelize.define<ProfileModel>(
   }
 );
 
-ProfileModel.hasMany(WorkExperienceModel, { foreignKey: "expId" });
-ProfileModel.belongsTo(PictureModel, { foreignKey: "picId" })
+ProfileModel.hasMany(WorkExperienceModel, { foreignKey: "expId", as: "workExperiences" });
+ProfileModel.belongsTo(PictureModel, { foreignKey: "picId", as: "profilePicture" });

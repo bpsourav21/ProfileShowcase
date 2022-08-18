@@ -8,7 +8,6 @@ import {
     CreationOptional,
 } from "sequelize";
 import sequelize from "../db/index";
-import { ProfileModel } from "./Profile";
 
 export type WorkExperienceAttribute = InferAttributes<PictureModel>;
 export type WorkExperienceDto = InferCreationAttributes<PictureModel>;

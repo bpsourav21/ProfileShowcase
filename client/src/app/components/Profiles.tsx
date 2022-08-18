@@ -1,8 +1,10 @@
+import React from "react";
 import { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { deleteProfile, getProfiles } from "../actions/profileActions";
-import { ProfileDto } from "../dtos/profile";
+import { PictureDto, ProfileDto } from "../dtos/profile";
 import { useAppSelector, useAppDispatch } from "../hooks";
+import ImageViewComponent from "./ImageViewComponent";
 
 const Profiles = () => {
   const allProfiles = useAppSelector((state) => state.profile.allProfiles);
@@ -19,19 +21,26 @@ const Profiles = () => {
     }
   }
 
+  const renderImage = (picture: PictureDto | null) => {
+    return (
+      <ImageViewComponent
+        picture={picture}
+        height={65}
+      />
+    )
+  }
+
   const renderTable = () => {
     const rowData = allProfiles.map((profile: ProfileDto, i: number) => {
       return (
         <tr key={"item_" + (i + 1)}>
-          <td>{profile.id}</td>
+          <td width={100}>{renderImage(profile.profilePicture)}</td>
           <td>{profile.name}</td>
-          <td>{profile.age}</td>
-          <td>{"profile.profilePicture"}</td>
-          <td className="text-center">
+          <td width={50}>{profile.age}</td>
+          <td width={100} className="text-center">
             <button className="btn btn-sm" onClick={() => navigate("/edit-profile/" + profile.id)}>
               <i className="fas fa-edit"></i>
             </button>
-
             <button className="btn btn-sm" onClick={() => onClickDelete(profile.id)}>
               <i className="fas fa-trash"></i>
             </button>
@@ -44,10 +53,9 @@ const Profiles = () => {
       <table className="table table-striped table-hover table-bordered">
         <thead>
           <tr>
-            <th>Id</th>
+            <th>Profile Picture</th>
             <th>Name</th>
             <th>Age</th>
-            <th>Profile Picture</th>
             <th className="text-center">Action</th>
           </tr>
         </thead>

@@ -14,7 +14,7 @@ export interface ProfileState {
   alert: AlertType | null
 }
 
-const emptyProfile = { name: "" } as ProfileDto;
+const emptyProfile = {} as ProfileDto;
 
 const initialState: ProfileState = {
   isLoading: false,

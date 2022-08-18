@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { addProfile, addProfileExperience, getOneProfile, resetProfile, updateProfile } from "../actions/profileActions";
 import { PictureDto, ProfileDto, WorkExperience } from "../dtos/profile";
 import { useAppSelector, useAppDispatch } from "../hooks";
+import { UPLOAD_ENDPOINT } from "../service/apiService";
 import ImageUploaderComponent from "./ImageUploaderComponent";
 import ModalComponent from './ModalComponent'
 
@@ -31,6 +32,11 @@ const AddOrEditProfile = () => {
     }
   }, []);
 
+  useEffect(() => {
+    updateProfilePicture(profile.profilePicture)
+
+  }, [profile]);
+
   const handleSaveWorkExperience = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     var target = e.currentTarget as HTMLFormElement;
@@ -38,10 +44,11 @@ const AddOrEditProfile = () => {
       jobTitle: target.jobTitle.value,
       jobDescription: target.jobDescription.value,
       company: target.company.value,
-      companyLogo: null,
+      companyLogo: null, // need to improve this
       endDate: target.endDate.value,
       startDate: target.startDate.value,
       isContinuing: false,
+      logoId: companyLogo ? companyLogo.id : ""
     };
 
     dispatch(addProfileExperience(wexp))
@@ -58,6 +65,7 @@ const AddOrEditProfile = () => {
       age: target.age.value,
       picId: proPic ? proPic.id : "",
       workExperiences: workExperiences,
+      profilePicture: null // need to improve this
     }
 
     if (profileId) {
@@ -129,6 +137,7 @@ const AddOrEditProfile = () => {
             <ImageUploaderComponent
               label={"Upload Company Logo"}
               onUploadImage={(picture) => updateCompanyLogo(picture)}
+              picture={companyLogo}
             />
           </div>
         </div>
@@ -175,6 +184,7 @@ const AddOrEditProfile = () => {
       <table className="table table-striped table-hover table-bordered">
         <thead>
           <tr>
+            <th>Company Logo</th>
             <th>Job title</th>
             <th>Company name</th>
             <th>Job description</th>
@@ -229,6 +239,7 @@ const AddOrEditProfile = () => {
                 <ImageUploaderComponent
                   label={"Upload Profile Photo"}
                   onUploadImage={(picture) => updateProfilePicture(picture)}
+                  picture={proPic}
                 />
               </div>
             </div>
@@ -237,7 +248,7 @@ const AddOrEditProfile = () => {
               <div className="d-grid gap-2 d-md-flex d-sm-flex justify-content-md-end justify-content-sm-end mb-3">
                 <button className="btn btn-primary" onClick={(e) => {
                   e.preventDefault();
-                  handleModal(true)
+                  handleModal(true);
                 }}>
                   Add Work experience
                 </button>

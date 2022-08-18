@@ -50,21 +50,20 @@ code {
   height: 100%;
   padding-top: 20px;
 }
-.mainWrapper .imageUpload .image-block {
-  height: 150px;
-  border: 1px solid #ced4da;
-  margin-bottom: 10px;
+.mainWrapper .image-block {
+  border: solid #ced4da;
   border-radius: 0.25rem;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.mainWrapper .imageUpload .image-block img {
+.mainWrapper .image-block img {
   height: 100%;
   border-radius: 0.25rem;
   padding: 2px;
 }
-.mainWrapper .imageUpload .image-block h6 {
+.mainWrapper .image-block h6 {
   color: #ced4da;
   font-weight: normal;
+  text-align: center;
 }

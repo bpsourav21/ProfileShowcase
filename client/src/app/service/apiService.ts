@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_ENDPOINT = process.env.PUBLIC_URL || "http://localhost:3001";
+export const API_ENDPOINT = process.env.PUBLIC_URL || "http://localhost:3001";
+export const UPLOAD_ENDPOINT = API_ENDPOINT + "/uploads/";
 const baseURL = API_ENDPOINT + "/api/";
 
 const apiService = axios.create({

@@ -14,6 +14,7 @@ export interface ProfileDto {
   createdAt?: Date;
   updatedAt?: Date;
   workExperiences: WorkExperience[];
+  profilePicture: PictureDto | null; // need to improve
 }
 
 export interface WorkExperience {
@@ -26,6 +27,7 @@ export interface WorkExperience {
   endDate: Date | null;
   isContinuing: boolean;
   expId?: number;
+  logoId?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }

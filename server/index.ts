@@ -23,16 +23,11 @@ const initAppConfig = () => {
   // parse requests of content-type - application/x-www-form-urlencoded
   app.use(express.urlencoded({ extended: true }));
 
-  // simple route
-  // app.get("/", (req: Request, res: Response) => {
-  //   res.json({ message: "Hello world" });
-  // });
-
   // application routes
   app.use("/api", routes);
 
   //static Images Folder
-  app.use('/uploads', express.static(path.join(__dirname, './uploads')))
+  app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
   // Serve any static files
   app.use(express.static(path.join(__dirname, '../client/build')));

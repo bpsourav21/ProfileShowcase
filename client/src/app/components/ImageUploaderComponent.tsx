@@ -1,12 +1,13 @@
-import classNames from "classnames";
-import { useState } from "react";
+import React from "react";
 import { PictureDto } from "../dtos/profile";
 import apiService from "../service/apiService";
+import ImageViewComponent from "./ImageViewComponent";
 
 type UploadPicture = string | ArrayBuffer | null;
 interface Props {
     label?: string;
     onUploadImage: (picture: PictureDto) => void;
+    picture: PictureDto | null;
 }
 
 const convertBase64 = (file: any): Promise<UploadPicture> => {
@@ -25,13 +26,9 @@ const convertBase64 = (file: any): Promise<UploadPicture> => {
 };
 
 const ImageUploaderComponent = (props: Props) => {
-    let [imgSrc, updateImage] = useState(null as UploadPicture);
-
     const uploadImage = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files && event.target.files[0];
         if (file) {
-            const base64 = await convertBase64(file);
-            updateImage(base64);
             let formData = new FormData();
             formData.append("picture", file);
             apiService
@@ -39,33 +36,22 @@ const ImageUploaderComponent = (props: Props) => {
                 .then((res) => {
                     const data: PictureDto = res.data;
                     props.onUploadImage(data);
-
                 })
                 .catch(e => {
-                    updateImage(null);
                 })
-        }
-        else {
-            updateImage(null);
         }
     };
 
-    let label = props.label ? props.label : "Please Upload image";
-    let imageBlock = <h6>{label}</h6>;
-    let bgColor = "#fff";
-    if (typeof (imgSrc) === 'string') {
-        imageBlock = <img src={imgSrc} />
-        bgColor = "#eee";
-    }
-
     return (
         <div className="imageUpload">
-            <div className="image-block"
-                style={{
-                    backgroundColor: bgColor
-                }}>
-                {imageBlock}
-            </div>
+            <ImageViewComponent
+                picture={props.picture}
+                label={props.label}
+                height={100}
+                bgColor={"#fff"}
+                showBorder={true}
+            />
+            <div className="mb-3"></div>
             <input
                 type="file"
                 className="form-control-file"

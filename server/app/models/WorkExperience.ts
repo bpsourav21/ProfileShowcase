@@ -6,6 +6,7 @@ import {
   CreationOptional,
 } from "sequelize";
 import sequelize from "../db/index";
+import { PictureModel } from "./Picture";
 import { ProfileModel } from "./Profile";
 
 export type WorkExperienceAttribute = InferAttributes<WorkExperienceModel>;
@@ -15,12 +16,12 @@ interface WorkExperienceModel
   id: CreationOptional<string>;
   jobTitle: string;
   company: string | null;
-  companyLogo: string | null;
   jobDescription: string | null;
   startDate: Date | null;
   endDate: Date | null;
   isContinuing: boolean;
   expId: number;
+  logoId: string;
   // Timestamps
   createdAt?: Date;
   updatedAt?: Date;
@@ -43,9 +44,6 @@ export const WorkExperienceModel = sequelize.define<WorkExperienceModel>(
     company: {
       type: DataTypes.STRING,
     },
-    companyLogo: {
-      type: DataTypes.BLOB("long"),
-    },
     jobDescription: {
       type: DataTypes.STRING,
     },
@@ -66,8 +64,18 @@ export const WorkExperienceModel = sequelize.define<WorkExperienceModel>(
         key: "id",
       },
     },
+    logoId: {
+      type: DataTypes.UUID,
+      references: {
+        model: PictureModel,
+        key: "id",
+      },
+    },
   },
   {
     // Other model options go here
   }
 );
+
+WorkExperienceModel.belongsTo(PictureModel, { foreignKey: "logoId", as: "companyLogo" });
+
