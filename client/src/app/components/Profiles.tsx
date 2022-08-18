@@ -21,20 +21,16 @@ const Profiles = () => {
     }
   }
 
-  const renderImage = (picture: PictureDto | null) => {
-    return (
-      <ImageViewComponent
-        picture={picture}
-        height={65}
-      />
-    )
-  }
-
   const renderTable = () => {
     const rowData = allProfiles.map((profile: ProfileDto, i: number) => {
       return (
         <tr key={"item_" + (i + 1)}>
-          <td width={100}>{renderImage(profile.profilePicture)}</td>
+          <td width={100}>
+            <ImageViewComponent
+              picture={profile.profilePicture}
+              height={65}
+            />
+          </td>
           <td>{profile.name}</td>
           <td width={50}>{profile.age}</td>
           <td width={100} className="text-center">

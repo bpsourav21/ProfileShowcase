@@ -5,6 +5,7 @@ import { PictureDto, ProfileDto, WorkExperience } from "../dtos/profile";
 import { useAppSelector, useAppDispatch } from "../hooks";
 import { UPLOAD_ENDPOINT } from "../service/apiService";
 import ImageUploaderComponent from "./ImageUploaderComponent";
+import ImageViewComponent from "./ImageViewComponent";
 import ModalComponent from './ModalComponent'
 
 const AddOrEditProfile = () => {
@@ -44,7 +45,7 @@ const AddOrEditProfile = () => {
       jobTitle: target.jobTitle.value,
       jobDescription: target.jobDescription.value,
       company: target.company.value,
-      companyLogo: null, // need to improve this
+      companyLogo: companyLogo, // need to improve this
       endDate: target.endDate.value,
       startDate: target.startDate.value,
       isContinuing: false,
@@ -171,6 +172,12 @@ const AddOrEditProfile = () => {
         (wexp: WorkExperience, i: number) => {
           return (
             <tr key={"item_" + (i + 1)}>
+              <td width={100}>
+                <ImageViewComponent
+                  picture={wexp.companyLogo}
+                  height={65}
+                />
+              </td>
               <td>{wexp.jobTitle}</td>
               <td>{wexp.company}</td>
               <td>{wexp.jobDescription}</td>
