@@ -7,10 +7,12 @@
     "clean": "rm -rf dist",
     "build": "npm run clean && npx tsc",
     "start": "node dist/index.js",
-    "client": "cd client && npm start",
-    "client-build": "cd client && npm run build",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "client": "concurrently --kill-others \"less-watch-compiler --config less-watcher.config.json\" \"react-scripts start\"",
+    "client-build": "react-scripts build",
+    "client-test": "react-scripts test",
+    "client-eject": "react-scripts eject"
   },
   "author": "",
   "license": "ISC",
@@ -24,7 +26,23 @@
     "pg": "^8.7.3",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.21.1",
-    "underscore": "^1.13.4"
+    "underscore": "^1.13.4",
+    "@reduxjs/toolkit": "^1.7.2",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.5.0",
+    "@testing-library/user-event": "^7.2.1",
+    "@types/jest": "^24.9.1",
+    "@types/node": "^12.20.43",
+    "@types/react": "^16.14.23",
+    "@types/react-dom": "^16.9.14",
+    "@types/react-redux": "^7.1.22",
+    "axios": "^0.25.0",
+    "react": "^17.0.2",
+    "react-bootstrap": "^2.2.2",
+    "react-dom": "^17.0.2",
+    "react-redux": "^7.2.6",
+    "react-router-dom": "^6.2.1",
+    "react-scripts": "5.0.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",
@@ -34,6 +52,23 @@
     "@types/underscore": "^1.11.4",
     "concurrently": "^7.3.0",
     "nodemon": "^2.0.19",
-    "typescript": "^4.7.4"
+    "typescript": "^4.7.4",
+    "less": "^4.1.0",
+    "less-watch-compiler": "^1.14.6"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
