@@ -39,6 +39,10 @@ export const ProfileModel = sequelize.define<ProfileModel>(
     age: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      validate: {
+        isNumeric: true,
+        isInt: true,
+      }
     },
     picId: {
       type: DataTypes.UUID,
