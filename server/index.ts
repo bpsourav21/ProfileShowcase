@@ -52,5 +52,4 @@ initDbConnection.then((res) => {
 })
   .catch((e) => {
     console.log(e);
-
   })

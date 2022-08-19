@@ -2,7 +2,7 @@ import sequelize from "./index";
 export const initDbConnection = new Promise((resolve, reject) => {
     // db sequelize
     // drop the table if resync
-    let resync = true //process.env.NODE_ENV === "development";
+    let resync = false //process.env.NODE_ENV === "development";
     sequelize
         .sync({ force: resync })
         .then(() => {
