@@ -5,6 +5,7 @@ import {
   WorkExperienceDto,
   WorkExperienceModel,
 } from "../models/WorkExperience";
+import _ from 'underscore';
 
 // Create and Save a new profile
 export const create = (req: Request, res: Response) => {
@@ -26,7 +27,8 @@ export const create = (req: Request, res: Response) => {
   // Save Profile in the database
   ProfileModel.create(profile)
     .then((data) => {
-      const experiences: WorkExperienceDto[] = req.body.workExperiences.map(
+      const experiences: WorkExperienceDto[] = _.map(
+        req.body.workExperiences,
         (exp: WorkExperienceDto) => {
           exp.expId = data.id;
           return exp;
@@ -88,11 +90,14 @@ export const findOne = (req: Request, res: Response) => {
     ]
   })
     .then(data => {
-      res.send(data);
+      if (data) {
+        res.send(data);
+      }
+      res.status(404).send({
+        message: "No Profile found with id=" + id
+      });
     })
     .catch(err => {
-      console.log(err);
-
       res.status(500).send({
         message: "Error retrieving Profile with id=" + id
       });
@@ -120,7 +125,8 @@ export const update = (req: Request, res: Response) => {
     where: { id: id }
   }).then(num => {
     if (num[0] == 1) {
-      const experiences: WorkExperienceDto[] = req.body.workExperiences.map(
+      const experiences = _.map(
+        req.body.workExperiences,
         (exp: WorkExperienceDto) => {
           exp.expId = parseInt(id);
           return upsertWorkExperience(exp);

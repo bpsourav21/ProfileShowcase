@@ -1,6 +1,7 @@
 import React from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import _ from "underscore";
 import { deleteProfile, getProfiles } from "../actions/profileActions";
 import { PictureDto, ProfileDto } from "../dtos/profile";
 import { useAppSelector, useAppDispatch } from "../hooks";
@@ -22,7 +23,7 @@ const Profiles = () => {
   }
 
   const renderTable = () => {
-    const rowData = allProfiles.map((profile: ProfileDto, i: number) => {
+    const rowData = _.map(allProfiles, (profile: ProfileDto, i: number) => {
       return (
         <tr key={"item_" + (i + 1)}>
           <td width={100}>

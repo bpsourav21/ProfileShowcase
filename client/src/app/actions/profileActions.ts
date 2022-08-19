@@ -57,6 +57,7 @@ export const getOneProfile = (id: number) => {
           type: ProfileActionType.GET_PROFILE.FAILED,
           payload: e,
         });
+        dispatch(onHandleAlert("No profile found", false));
       });
   };
 };
@@ -115,13 +116,13 @@ export const updateProfile = (id: number, profile: ProfileDto, cb?: VoidFunction
 
 export const deleteProfile = (id: number) => {
   return (dispatch: AppDispatch) => {
-    dispatch({ type: ProfileActionType.UPDATE_PROFILE.PROCESSING });
+    dispatch({ type: ProfileActionType.DELETE_PROFILE.PROCESSING });
     apiService
       .delete(`/profiles/` + id)
       .then((res) => {
         const data = res.data;
         dispatch({
-          type: ProfileActionType.UPDATE_PROFILE.SUCCESS,
+          type: ProfileActionType.DELETE_PROFILE.SUCCESS,
           payload: data
         });
         dispatch(onHandleAlert("Profile deleted successfully", true));
@@ -129,7 +130,7 @@ export const deleteProfile = (id: number) => {
       })
       .catch((e) => {
         dispatch({
-          type: ProfileActionType.UPDATE_PROFILE.FAILED,
+          type: ProfileActionType.DELETE_PROFILE.FAILED,
           payload: e,
         });
         dispatch(onHandleAlert("Profile deleted failed", false));

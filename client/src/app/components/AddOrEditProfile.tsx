@@ -3,10 +3,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { addProfile, addProfileExperience, getOneProfile, resetProfile, updateProfile } from "../actions/profileActions";
 import { PictureDto, ProfileDto, WorkExperience } from "../dtos/profile";
 import { useAppSelector, useAppDispatch } from "../hooks";
-import { UPLOAD_ENDPOINT } from "../service/apiService";
 import ImageUploaderComponent from "./ImageUploaderComponent";
 import ImageViewComponent from "./ImageViewComponent";
 import ModalComponent from './ModalComponent'
+import _ from "underscore";
 
 const AddOrEditProfile = () => {
   const profile =
@@ -189,7 +189,7 @@ const AddOrEditProfile = () => {
 
   const renderTable = () => {
     const rowData =
-      workExperiences.map(
+      _.map(workExperiences,
         (wexp: WorkExperience, i: number) => {
           return (
             <tr key={"item_" + (i + 1)}>
