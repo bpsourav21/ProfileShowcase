@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { addProfile, addProfileExperience, getOneProfile, resetProfile, updateProfile } from "../actions/profileActions";
+import { addProfile, addProfileExperience, getOneProfile, onHandleAlert, resetProfile, updateProfile } from "../actions/profileActions";
 import { PictureDto, ProfileDto, WorkExperience } from "../dtos/profile";
 import { useAppSelector, useAppDispatch } from "../hooks";
 import ImageUploaderComponent from "./ImageUploaderComponent";
 import ImageViewComponent from "./ImageViewComponent";
 import ModalComponent from './ModalComponent'
 import _ from "underscore";
+import { isWhitespaces } from '../helpers/commonMethod'
 
 const AddOrEditProfile = () => {
   const profile =
@@ -52,14 +53,38 @@ const AddOrEditProfile = () => {
       logoId: companyLogo ? companyLogo.id : ""
     };
 
-    dispatch(addProfileExperience(wexp))
-    handleModal(false);
+    let errorMsg = "";
+    if (isWhitespaces(wexp.jobTitle)) {
+      errorMsg = "Job title can not be empty"
+    }
+    else if (isWhitespaces(wexp.jobDescription)) {
+      errorMsg = "Job description can not be empty"
+    }
+    else if (isWhitespaces(wexp.company)) {
+      errorMsg = "Company name can not be empty"
+    }
+    else if (wexp.startDate &&
+      !isContinuing &&
+      wexp.endDate &&
+      new Date(wexp.startDate) > new Date(wexp.endDate)
+    ) {
+      errorMsg = "Start Date can not greater than End Date";
+    }
+    else {
+      // do nothing
+    }
+
+    if (isWhitespaces(errorMsg)) {
+      dispatch(addProfileExperience(wexp))
+      handleModal(false);
+    }
+    else {
+      dispatch(onHandleAlert(errorMsg, false));
+    }
   }
 
   const onProfileSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("on submit press");
-    
     var target = e.currentTarget as HTMLFormElement;
 
     const currProfile: ProfileDto = {
@@ -71,11 +96,30 @@ const AddOrEditProfile = () => {
       profilePicture: null // need to improve this
     }
 
-    if (profileId) {
-      dispatch(updateProfile(profileId, currProfile, () => navigate('/')));
+    let errorMsg = "";
+    if (isWhitespaces(currProfile.name)) {
+      errorMsg = "Name can not be empty"
+    }
+    else if (currProfile.age <= 0) {
+      errorMsg = "Age can not be zero"
+    }
+    else if (isWhitespaces(currProfile.picId)) {
+      errorMsg = "Please select profile picture"
     }
     else {
-      dispatch(addProfile(currProfile, () => navigate('/')));
+      // Nothing happen
+    }
+
+    if (isWhitespaces(errorMsg)) {
+      if (profileId) {
+        dispatch(updateProfile(profileId, currProfile, () => navigate('/')));
+      }
+      else {
+        dispatch(addProfile(currProfile, () => navigate('/')));
+      }
+    }
+    else {
+      dispatch(onHandleAlert(errorMsg, false));
     }
   }
 
@@ -134,6 +178,7 @@ const AddOrEditProfile = () => {
               placeholder="End Date"
               name="endDate"
               disabled={isContinuing}
+              required={!isContinuing}
             />
           </div>
         </div>

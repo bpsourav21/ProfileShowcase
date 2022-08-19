@@ -20,14 +20,14 @@ export interface ProfileDto {
 export interface WorkExperience {
   id?: string;
   jobTitle: string;
-  company: string | null;
+  company: string;
   companyLogo: PictureDto | null;
-  jobDescription: string | null;
+  jobDescription: string;
   startDate: Date | null;
   endDate: Date | null;
   isContinuing: boolean;
   expId?: number;
-  logoId?: string;
+  logoId: string;
   createdAt?: Date;
   updatedAt?: Date;
 }

@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import _ from "underscore";
 import { deleteProfile, getProfiles } from "../actions/profileActions";
-import { PictureDto, ProfileDto } from "../dtos/profile";
+import { ProfileDto } from "../dtos/profile";
 import { useAppSelector, useAppDispatch } from "../hooks";
 import ImageViewComponent from "./ImageViewComponent";
 
