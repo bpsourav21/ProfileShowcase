@@ -50,7 +50,7 @@ const Profiles = () => {
       <table className="table table-striped table-hover table-bordered">
         <thead>
           <tr>
-            <th>Profile Picture</th>
+            <th>Picture</th>
             <th>Name</th>
             <th>Age</th>
             <th className="text-center">Action</th>

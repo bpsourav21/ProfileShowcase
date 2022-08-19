@@ -93,9 +93,11 @@ export const findOne = (req: Request, res: Response) => {
       if (data) {
         res.send(data);
       }
-      res.status(404).send({
-        message: "No Profile found with id=" + id
-      });
+      else {
+        res.status(404).send({
+          message: "No Profile found with id=" + id
+        });
+      }
     })
     .catch(err => {
       res.status(500).send({

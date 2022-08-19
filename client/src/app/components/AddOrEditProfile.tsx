@@ -58,6 +58,8 @@ const AddOrEditProfile = () => {
 
   const onProfileSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log("on submit press");
+    
     var target = e.currentTarget as HTMLFormElement;
 
     const currProfile: ProfileDto = {
@@ -228,7 +230,7 @@ const AddOrEditProfile = () => {
   }
 
   return (
-    <div className="container">
+    <div className="content">
       <section className="panel panel-default">
         <div className="panel-heading">
           <h3 className="panel-title">Profile Information</h3>
