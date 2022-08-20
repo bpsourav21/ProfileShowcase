@@ -1,11 +1,26 @@
 import { Router } from "express";
 import multer from 'multer';
 import path from 'path';
+import fs from 'fs';
 import { uploadImage } from "../controllers/upload.js";
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, './uploads/')
+        const dir = "./uploads/"
+        fs.stat(dir, (err, stats) => {
+            if (err) {
+                fs.mkdir(dir, (err) => {
+                    if (err) {
+                        console.log("Directory creation failed");
+                        return;
+                    }
+                    cb(null, dir)
+                });
+            }
+            else {
+                cb(null, dir)
+            }
+        })
     },
     filename: (req, file, cb) => {
         cb(null, Date.now() + path.extname(file.originalname))
