@@ -90,10 +90,30 @@
     // "allowUnreachableCode": true,                     /* Disable error reporting for unreachable code. */
     /* Completeness */
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
-    "skipLibCheck": true /* Skip type checking all .d.ts files. */
+    // "skipLibCheck": true, /* Skip type checking all .d.ts files. */
+    // // "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    // // "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    // // "strict": true,
+    // // "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    // // "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    // "noEmit": true,
+    "jsx": "react-jsx"
   },
   "include": [
-    "./server/**/*"
+    "./server/**/*",
+    "./src/**/*"
   ],
   "exclude": [
     "./src/types/*.ts",
