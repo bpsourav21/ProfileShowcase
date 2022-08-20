@@ -29,6 +29,11 @@ const initAppConfig = () => {
   //static Images Folder
   app.use('/uploads', express.static(path.join(__dirname, '../../uploads')));
 
+  // Service worker route
+  app.get("/service-worker.js", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "../src", "serviceWorker.js"));
+  });
+
   // Serve any static files
   app.use(express.static(path.join(__dirname, '../build')));
 
