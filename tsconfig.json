@@ -108,12 +108,12 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
+    // "noEmit": true,
     "jsx": "react-jsx"
   },
   "include": [
     "./server/**/*",
-    "src"
+    "./src/**/*"
   ],
   "exclude": [
     "./src/types/*.ts",

@@ -27,14 +27,14 @@ const initAppConfig = () => {
   app.use("/api", routes);
 
   //static Images Folder
-  app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+  app.use('/uploads', express.static(path.join(__dirname, '../../uploads')));
 
   // Serve any static files
-  app.use(express.static(path.join(__dirname, '../client/build')));
+  app.use(express.static(path.join(__dirname, '../build')));
 
   // Handle React routing, return all requests to React app
   app.get('*', function (req, res) {
-    res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+    res.sendFile(path.join(__dirname, '../build', 'index.html'));
   });
 
   // set port, listen for requests

@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "clean": "rm -rf dist",
-    "build": "npm run clean && npx tsc",
-    "start": "node dist/index.js",
-    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
+    "build": "npm run clean && npx tsc && npm run client-build",
+    "start": "node dist/server/index.js",
+    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/server/index.js\"",
     "test": "echo \"Error: no test specified\" && exit 1",
     "client": "concurrently --kill-others \"less-watch-compiler --config less-watcher.config.json\" \"react-scripts start\"",
     "client-build": "react-scripts build",
