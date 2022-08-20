@@ -32,6 +32,14 @@ Your app is ready to be deployed!
 Builds the FE app for production to the `dist/build` folder.<br />
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
+To work on locally please create a .env file and set below values
+```
+PORT=3000
+NODE_ENV="development"
+DEV_PORT=3001
+BUILD_PATH="./dist/build"
+DATABASE_URL=<DB_URL>
+```
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
